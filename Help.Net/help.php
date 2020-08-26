@@ -1,0 +1,1 @@
+Current Asset, Fixed Asset, Capital Account, Current Liabilities, Direct Income, Indirect Income, Direct Expense, Indirect Expense

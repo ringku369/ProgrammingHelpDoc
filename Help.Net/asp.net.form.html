@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    
+vchdate.Value = DateTime.Now.ToString("yyyy-MM-dd");
+
+//string vchdate = Request.Form["vchdate"];
+string vchdate1 = vchdate.Value.ToString();
+
+
+<div class="form-group">
+    <div class="col-md-3">
+        <label for="Level" class="control-label">Voucher Date</label>
+        <div class="input-group date">
+            <div class="input-group-addon">
+            <i class="fa fa-calendar"></i>
+            </div>
+            <input name="vchdate" runat="server" placeholder="YYYY-MM-DD" value="" type="text" class="form-control datepicker3" id="vchdate" autocomplete="off">
+        </div>
+    </div>
+</div>
+
+
+fdate.Value = DateTime.Today.AddMonths(-1).ToString("yyyy-MM-dd");
+todate.Value = DateTime.Now.ToString("yyyy-MM-dd");
+
+<div class="form-group">
+    <div class="col-md-6">
+        <label for="Level" class="control-label">From Date</label>
+        <div class="input-group date">
+            <div class="input-group-addon">
+            <i class="fa fa-calendar"></i>
+            </div>
+            <input name="fdate" runat="server" placeholder="YYYY-MM-DD" value="" type="text" class="form-control datepicker3" id="fdate" autocomplete="off">
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <div class="col-md-6">
+        <label for="Level" class="control-label">From Date</label>
+        <div class="input-group date">
+            <div class="input-group-addon">
+            <i class="fa fa-calendar"></i>
+            </div>
+            <input name="todate" runat="server" placeholder="YYYY-MM-DD" value="" type="text" class="form-control datepicker3" id="todate" autocomplete="off">
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
