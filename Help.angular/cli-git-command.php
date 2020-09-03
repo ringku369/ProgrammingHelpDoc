@@ -1,5 +1,8 @@
 <?php  
 
+// Git Username : ringku369@gmail.com password : Aa1123581321@#
+// Evaly password : Aa1123581321@#
+
 // for all git command
 http://guides.beanstalkapp.com/version-control/common-git-commands.html
 

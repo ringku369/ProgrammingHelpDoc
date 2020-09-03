@@ -43,6 +43,7 @@ CASE WHEN type IS NULL THEN '' ELSE 'N/A' END AS type
 CASE WHEN type = 1 THEN 'Direct' WHEN type = 2 THEN 'Indirect' ELSE 'N/A' END AS type
 CASE type WHEN 1 THEN 'Direct' WHEN 2 THEN 'Indirect' ELSE 'N/A' END AS type
 
+CASE parent_id WHEN 0 THEN NULL ELSE parent_id END AS parent_id
 
 
 SELECT * FROM purchasedetails WHERE CONVERT(varchar(10),[created_at],120) BETWEEN '2020-04-12' AND '2020-04-12'
