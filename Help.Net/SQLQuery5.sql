@@ -119,6 +119,22 @@ CREATE TABLE customerpayments (
 )
 
 
+CREATE TABLE networks (
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	branch_id BIGINT NOT NULL,
+	user_id BIGINT NOT NULL,
+	code BIGINT DEFAULT (((ident_current('networks')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	
+	name NVARCHAR(128) NULL,
+	serverip NVARCHAR(128) NULL,
+	remarks NVARCHAR(128) NULL,
+	status BIT DEFAULT 0,
+	created_At DATETIME DEFAULT GETDATE(),
+	updated_At DATETIME DEFAULT GETDATE(),
+)
+
+
+
 
 
 

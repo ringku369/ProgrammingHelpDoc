@@ -270,15 +270,11 @@ $(document).ready(function() {
 
 
 
-<script type="text/javascript">
-  
 
 $(document).ready(function() {
   
   $('#level').on('change', function(e){
     var level = e.target.value;
-
-
     var route = "{{route('ajax.GetUsersOnLevelChange')}}/"+level;
     $.get(route, function(data) {
       //console.log(data);
@@ -288,14 +284,29 @@ $(document).ready(function() {
         $('#user_id').append('<option value="' + data.id + '">' + data.firstname + " "+ data.lastname + " ( " +data.email +" ) " +  '</option>');
       });
     });
-
-
   });
-
-
 });
 
-</script> 
 
 Route::get('/districtSelectBoxOnDivisionWithAjax/{id?}', ['as'=>'admin.districtSelectBoxOnDivisionWithAjax','uses'=>'AdminController@DistrictSelectBoxOnDivisionWithAjax'])->where(['id' => '[0-9]+']);
 
+$('.insert-btn').click(function () {
+                
+    $(".panel-body :input[type=text]").each(function () {
+        var input = $(this);
+        var inputval = input.val();
+
+        if (inputval) {
+            $(".loading").show();
+        } else {
+            $(".loading").hide();
+            return false;
+        }
+        console.log(inputval);
+    });
+
+    //$('.panel-body').find('input[type=text]').each(function () {
+    //    var input = $(this);
+    //    console.log(input.val());
+    //});
+});
