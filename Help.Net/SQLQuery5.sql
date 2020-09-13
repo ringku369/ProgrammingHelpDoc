@@ -133,6 +133,42 @@ CREATE TABLE networks (
 	updated_At DATETIME DEFAULT GETDATE(),
 )
 
+CREATE TABLE ispzones (
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	branch_id BIGINT NOT NULL,
+	ispnetwork_id BIGINT NOT NULL,
+	code BIGINT DEFAULT (((ident_current('ispzones')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	
+	name NVARCHAR(128) NULL,
+	status BIT DEFAULT 1,
+	created_At DATETIME DEFAULT GETDATE(),
+	updated_At DATETIME DEFAULT GETDATE(),
+)
+
+CREATE TABLE ispsubzones (
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	branch_id BIGINT NOT NULL,
+	ispzone_id BIGINT NOT NULL,
+	code BIGINT DEFAULT (((ident_current('ispsubzones')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	
+	name NVARCHAR(128) NULL,
+	status BIT DEFAULT 1,
+	created_At DATETIME DEFAULT GETDATE(),
+	updated_At DATETIME DEFAULT GETDATE(),
+)
+
+CREATE TABLE ispboxes (
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	branch_id BIGINT NOT NULL,
+	ispsubzone_id BIGINT NOT NULL,
+	code BIGINT DEFAULT (((ident_current('ispboxes')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	
+	name NVARCHAR(128) NULL,
+	status BIT DEFAULT 1,
+	created_At DATETIME DEFAULT GETDATE(),
+	updated_At DATETIME DEFAULT GETDATE(),
+)
+
 
 
 
