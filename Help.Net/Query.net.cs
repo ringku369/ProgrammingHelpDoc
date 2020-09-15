@@ -70,3 +70,24 @@ success_msg.Text = "Data inserted successfully";
 error_area.Visible = true;
 success_area.Visible = false;
 error_msg.Text = "Data can not be deleted due to related with other data";
+
+
+string query5 = @"insert into ispclients (branch_id,ispnetwork_id,ispzone_id,ispsubzone_id,ispbox_id,
+                        fullname,email,@password,rusername,rpassword,profile,service) 
+                                                        values (@branch_id,@ispnetwork_id,@ispzone_id,@ispsubzone_id,@ispbox_id,
+                        @fullname,@email,@password,@rusername,@rpassword,@profile,@service)";
+                        SqlCommand cmd1 = BaseClass.CommandBuilder(query5);
+                        cmd1.Parameters.AddWithValue("@branch_id", this._branch_id);
+                        cmd1.Parameters.AddWithValue("@ispnetwork_id", ispnetwork_id);
+                        cmd1.Parameters.AddWithValue("@ispzone_id", ispzone_id);
+                        cmd1.Parameters.AddWithValue("@ispsubzone_id", ispsubzone_id);
+                        cmd1.Parameters.AddWithValue("@ispbox_id", ispbox_id);
+                        cmd1.Parameters.AddWithValue("@fullname", fullname);
+                        cmd1.Parameters.AddWithValue("@email", email);
+                        cmd1.Parameters.AddWithValue("@password", password);
+                        cmd1.Parameters.AddWithValue("@rusername", rusername);
+                        cmd1.Parameters.AddWithValue("@rpassword", rpassword);
+                        cmd1.Parameters.AddWithValue("@profile", profile);
+                        cmd1.Parameters.AddWithValue("@service", service);
+                        cmd1.ExecuteNonQuery();
+                        BaseClass.Con.Close();

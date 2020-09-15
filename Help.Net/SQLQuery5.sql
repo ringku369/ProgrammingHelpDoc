@@ -169,6 +169,52 @@ CREATE TABLE ispboxes (
 	updated_At DATETIME DEFAULT GETDATE(),
 )
 
+CREATE TABLE isppackages(
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	branch_id BIGINT NOT NULL,
+	ispnetwork_id BIGINT NOT NULL,
+	ispsubzone_id BIGINT NOT NULL,
+	code BIGINT DEFAULT (((ident_current('isppackages')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	
+	name NVARCHAR(128) NULL,
+	bandwidth NVARCHAR(128) NULL,
+	status BIT DEFAULT 1,
+
+	maintariff DECIMAL(18, 2) DEFAULT 0,
+	clienttariff DECIMAL(18, 2) DEFAULT 0,
+
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
+)
+
+
+CREATE TABLE ispclients(
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	branch_id BIGINT NOT NULL,
+	ispnetwork_id BIGINT NOT NULL,
+	ispzone_id BIGINT NULL,
+	ispsubzone_id BIGINT NULL,
+	ispbox_id BIGINT NULL,
+	isppackage_id BIGINT NULL,
+
+	code BIGINT DEFAULT (((ident_current('ispclients')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	
+	fullname NVARCHAR(128) NULL,
+	username NVARCHAR(128) NULL,
+	password NVARCHAR(128) NULL,
+
+	rusername NVARCHAR(128) NULL,
+	rpassword NVARCHAR(128) NULL,
+	profile NVARCHAR(128) NULL,
+	service NVARCHAR(128) NULL,
+	
+	status BIT DEFAULT 1,
+	status1 BIT DEFAULT 1,
+
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
+)
+
 
 
 
