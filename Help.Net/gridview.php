@@ -30,6 +30,9 @@ protected void GridView1_RowDataBound(object sender, GridViewRowEventArgs e)
     dramount += Convert.ToDouble(e.Row.Cells[4].Text);
     cramount += Convert.ToDouble(e.Row.Cells[5].Text);
 
+    //Response.Write("sft_status : " + sft_status + " rtr_status : " + rtr_status + "<br />");
+
+
   }
 
   if (e.Row.RowType == DataControlRowType.Footer)

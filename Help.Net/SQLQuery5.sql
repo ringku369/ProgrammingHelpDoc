@@ -216,6 +216,60 @@ CREATE TABLE ispclients(
 )
 
 
+CREATE TABLE ispclientpayments(
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	branch_id BIGINT NOT NULL,
+	ispnetwork_id BIGINT NOT NULL,
+	ispzone_id BIGINT NULL,
+	ispsubzone_id BIGINT NULL,
+	ispbox_id BIGINT NULL,
+	ispclient_id BIGINT NULL,
+	isppackage_id BIGINT NULL,
+	
+	code BIGINT DEFAULT (((ident_current('ispclientpayments')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	
+	bill DECIMAL(18, 2) DEFAULT 0,
+	
+	status BIT DEFAULT 1,
+
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
+)
+
+
+CREATE TABLE ispclientinvoices(
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	branch_id BIGINT NOT NULL,
+	ispnetwork_id BIGINT NOT NULL,
+	ispzone_id BIGINT NULL,
+	ispsubzone_id BIGINT NULL,
+	ispbox_id BIGINT NULL,
+	ispclient_id BIGINT NULL,
+	isppackage_id BIGINT NULL,
+	code BIGINT DEFAULT (((ident_current('ispclientinvoices')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	
+	packagebill FLOAT DEFAULT 0,
+
+	fromdate DATETIME DEFAULT GETDATE(),
+	todate DATETIME DEFAULT GETDATE(),
+	totalday DATETIME DEFAULT GETDATE(),
+
+	billperday FLOAT DEFAULT 0,
+
+	curentdate DATETIME DEFAULT GETDATE(),
+	
+	daycount INT DEFAULT 1,
+
+	toalbill FLOAT DEFAULT 0,
+	balance FLOAT DEFAULT 0,
+
+	status BIT DEFAULT 1,
+
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
+)
+
+
 
 
 
