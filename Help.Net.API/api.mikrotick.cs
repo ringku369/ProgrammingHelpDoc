@@ -1,3 +1,8 @@
+
+//Router Configuration Sequence
+ # interface => address => dns => firewall => route 
+
+
 // wan network confifure by cmd cli
 
 [admin@MikroTik] > interface set numbers=0 name=Wan comment=WanInterface
