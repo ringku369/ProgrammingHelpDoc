@@ -1,1 +1,242 @@
-Hello
+
+RIMES Examination answer sheet for IT expert position
+
+
+Hello sir how are you, hope you are well & safe, i'm grateful to you for shortlisting in IT expert position, alhamdulillah i have been able to answer all questions as well as. All question answers given below also ateched the program files and database & table with this mail, please chek ... Thanks :)
+
+
+# Answer to the ques no 1
+=========================
+
+To avoid duplicate entries in database level would set unique key to these column.
+I have already setted up to unique key into table what table (t_user) has provided me, also given code in below
+
+ALTER TABLE t_user_log ADD UNIQUE KEY (option_1,option_2)
+
+
+
+
+# Answer to the ques no 2
+=========================
+
+To create individual row and column wise log table into database level should use trigger what can easily handle for data log
+I have already setted up to after update trigger into table what table (t_user) has provided me, also given code in below
+
+
+BEGIN
+    IF OLD.fullname <> new.fullname THEN
+        INSERT INTO t_user_log(t_user_id,fullname)
+        VALUES(old.id, new.fullname);
+    END IF;
+
+    IF OLD.option_1 <> new.option_1 THEN
+        INSERT INTO t_user_log(t_user_id,option_1)
+        VALUES(old.id,new.option_1);
+    END IF;
+
+    IF OLD.option_2 <> new.option_2 THEN
+        INSERT INTO t_user_log(t_user_id,option_2)
+        VALUES(old.id,new.option_2);
+    END IF;
+END
+
+
+
+# Answer to the ques no 3
+=========================
+
+Using php CURL fetched up data from given API and displayed as like sample output with condition, 
+Also given code in below
+
+Note : To enable CURL uncomment ;extension=php_curl.dll in path xampp\apache\bin\php.ini,
+if already enabled please ignore it
+
+
+
+
+<?php  
+
+$curl = new Curl();
+$curl::getdata();
+
+class Curl
+{
+	private static $url;
+
+    public function __construct()
+    {
+    	self::$url = "http://bdservers.site/exam_test/forecast_data.json";
+    }
+
+
+    public static  function getdata(){
+
+    	$cURLConnection = curl_init();
+
+		curl_setopt($cURLConnection, CURLOPT_URL, self::$url);
+		curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
+
+		$phoneList = curl_exec($cURLConnection);
+		curl_close($cURLConnection);
+
+		$jsonArrayResponse = json_decode($phoneList);
+
+		$collection = $jsonArrayResponse->data;
+
+
+		$result = [];
+
+
+		foreach ($collection as $key => $value) {
+			$arry_datas = $value->forecast_data->rf;
+
+
+			foreach ($arry_datas as $key => $data) {
+
+				if ($data->val_max >= 5) {
+					$step_start = $data->step_start;
+					$step_end = $data->step_end;
+					$val_max = $data->val_max;
+					/*$result[] = [
+						$step_start .", ". $step_end .", ". number_format((float)$val_max, 2, '.', ''),
+					];*/
+
+					echo $step_start .", ". $step_end .", ". number_format((float)$val_max, 2, '.', '') . "<br />";
+
+				}
+			}
+		}
+		/*echo '<pre>';
+		print_r($result);*/
+    }
+}
+
+
+
+# Answer to the ques no 4
+=========================
+
+Using php i have declared a function into a class file which will take a string formatted
+full date in dd-mm-yyyy format and will return available leagues for
+that date
+
+Also given code in below
+
+
+
+<?php  
+
+	$classA = new ClassA();
+
+	$classA->datas($arg = "28-01-2020");
+	$classA->datas($arg = "28-01-2035");
+	$classA->datas($arg = "15-02-2018");
+
+	class ClassA
+	{
+		
+		function __construct()
+		{
+			date_default_timezone_set('Asia/Dhaka');
+		}
+
+		function datas($arg = "28-01-2020"){
+			
+			$year = substr($arg, strrpos(trim($arg),"-") + 1);
+			$year1 = substr($arg, strrpos(trim($arg),"-") + 1);
+
+			$day_month = substr(trim($arg),0,5);
+
+			$database = [
+
+				['League' => 'League A', 'Start' => '22 January', 'End' => '21 March'],
+				['League' => 'League B', 'Start' => '22 February', 'End' => '04 April'],
+				['League' => 'League C', 'Start' => '15 April', 'End' => '16 June'],
+				['League' => 'League D', 'Start' => '12 May', 'End' => '29 July'],
+				['League' => 'League E', 'Start' => '03 December', 'End' => '15 January'],
+				['League' => 'League F', 'Start' => '15 December', 'End' => '03 February']
+			];
+
+			
+			$result = [];
+			$converteddb = [];
+
+			foreach ($database as $key => $value) {
+				
+				$str = $value["Start"];
+				$day = substr($str,0,2);
+				$month_str = substr($str, strpos($str," "));
+
+				$month = trim(date("m", strtotime($month_str)));
+
+				$str1 = $value["End"];
+				$day1 = substr($str1,0,2);
+				$month_str1 = substr($str1, strpos($str1," "));
+
+				$month1 = trim(date("m", strtotime($month_str1)));
+
+				$League = $value['League'];
+
+				//With Year===
+				$Start = $day . "-" . $month . "-" . $year;
+				if ($key >= 4) {
+					$yearr = (int) $year1 + 1;
+					$End = $day1 . "-" . $month1 . "-" . $yearr;
+				}else{
+					$End = $day1 . "-" . $month1 . "-" . $year;
+				}
+				//With Year===
+
+
+				$converteddb[] = [
+					'League' => $League, 'Start' => $Start, 'End' => $End
+				];
+
+
+			}
+
+
+			foreach ($converteddb as $key => $value) {
+					$League = $value['League'];
+					
+
+				$Start = strtotime($value["Start"]);
+			   	$End = strtotime($value["End"]);
+
+			   	if ($key >= 4 ) {
+			   	  $arg1 = date("d-m-Y", strtotime(date("d-m-Y", strtotime($arg)) . " + 1 year"));
+			   		$argument = strtotime($arg1);
+			   	} else {
+			   		$argument = strtotime($arg);
+			   	}
+
+			    if($Start <= $argument && $End >= $argument) {
+			      $result[] = $League;
+			    }
+			}
+
+			echo "<pre>";
+			print_r($result);
+
+		}
+	}
+
+
+
+
+
+
+# Answer to the ques no 5
+=========================
+
+
+To secure public API based web application and avoid CORS attack from all level users  we should use Access-Control-Allow-Origin into Header section in server end.
+
+Also given code in below
+
+<? php
+ 
+$allow_id = '10.10.10.100'; // we can use also domain name
+
+header('Access-Control-Allow-Origin:'. $allow_id)
+
