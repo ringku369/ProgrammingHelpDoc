@@ -48,10 +48,12 @@ DROP USER RINGKU CASCADE;
 #CREATE USER books_admin IDENTIFIED BY MyPassword;
 
 CREATE USER RINGKU IDENTIFIED BY Oracle123;
+CREATE USER MEGHNAHR IDENTIFIED BY Oracle123;
 
 
 GRANT 
 RESOURCE,
+IMP_FULL_DATABASE,
 CREATE SESSION, 
 CREATE TABLE, 
 CREATE VIEW, 
@@ -59,7 +61,7 @@ CREATE SEQUENCE,
 CREATE ANY SEQUENCE, 
 CREATE ANY SYNONYM, 
 CREATE ANY TRIGGER, 
-CREATE PROCEDURE TO RINGKU;
+CREATE PROCEDURE TO MEGHNAHR;
 
 
 #### cmd >
@@ -71,8 +73,12 @@ imp system/manager file=emp.dmp log=emp_imp.log full=y
 
 
 
+
+
 EXP MEGHNAHR/meghnahr321@TESTDB FILE=F:\hrback\meghnahr.dmp LOG=F:\hrback\meghnahr.log;
 
+IMP MEGHNAHR/Oracle123@ORCL FILE=F:\hrback\meghnahr.dmp LOG=F:\hrback\meghnahr.log FULL=Y;
 
 
+# 180.92.224.141 / testdb / meghnahr/meghnahr321
 <add key="ConnectionString2" value="user id=meghnahr;password=meghnahr321; data source=TESTDB;PERSIST SECURITY INFO=True;Connect Timeout=2000;  Max Pool Size=2000"/>
