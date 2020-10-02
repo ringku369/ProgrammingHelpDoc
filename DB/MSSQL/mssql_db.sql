@@ -18,6 +18,7 @@ ALTER TABLE table_name
 DROP COLUMN column_name;
 ADD column_name datatype;
 ALTER COLUMN column_name datatype; 
+MODIFY COLUMN column_name datatype; 
 
 
 ALTER TABLE users

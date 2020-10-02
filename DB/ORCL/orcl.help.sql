@@ -2,19 +2,39 @@
 #### https://www.oracletutorial.com/oracle-administration/oracle-grant-all-privileges-to-a-user/
 
 
-TRUNCATE TABLE STUDENTS;
+TRUNCATE TABLE students;
 
-CREATE TABLE STUDENTS (
-
-	id NUMBER (4) NOT NULL UNIQUE,
+CREATE TABLE students (
+    id NUMBER (4) NOT NULL UNIQUE,
 	name VARCHAR(128) NULL
 );
 
 
+CREATE TABLE students (
+
+	id NUMBER (4) NOT NULL PRIMARY KEY,
+	name VARCHAR(128) NULL
+);
+
+
+ALTER TABLE students;
+MODIFY id NOT NULL PRIMARY KEY;
+
+ALTER TABLE students
+ADD created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE students
+ADD updated_at TIMESTAMP DEFAULT NOW();
+
+
+
+
 CREATE SEQUENCE AUTO_INCREMENT_SEQ START WITH 1;
+CREATE SEQUENCE AUTO_INCREMENT_SEQ START WITH 1 MINVALUE 1 MAXVALUE 100000;
+
 
 CREATE OR REPLACE TRIGGER STUDENTS_AUTO_INCREMENT 
-BEFORE INSERT ON STUDENTS 
+BEFORE INSERT ON students 
 FOR EACH ROW
 
 BEGIN
@@ -24,13 +44,24 @@ BEGIN
 END;
 
 
-select * from STUDENTS;
+INSERT INTO students (name) VALUES  ('Saim');
+INSERT INTO students (name) VALUES  ('Ringku');
+INSERT INTO students (name) VALUES  ('Jibran');
+INSERT INTO students (name) VALUES  ('Nipa');
+INSERT INTO students (name) VALUES  ('Nico');
 
-INSERT INTO STUDENTS (NAME) VALUES  ('Saim');
-INSERT INTO STUDENTS (NAME) VALUES  ('Ringku');
-INSERT INTO STUDENTS (NAME) VALUES  ('Jibran');
-INSERT INTO STUDENTS (NAME) VALUES  ('Nipa');
-INSERT INTO STUDENTS (NAME) VALUES  ('Nico');
+
+
+select * from students;
+
+select id, name, TO_CHAR(created_at,'dd/mm/yyyy') as created_at from students;
+
+select id, name, TO_CHAR(SYSDATE, 'MM-DD-YYYY HH12:MI:SS') AS today  from students;
+
+select id, name, TO_CHAR(CURRENT_DATE, 'DD-MON-YYYY HH:MI:SS') AS today  from students;
+
+select id, name, TO_CHAR(sysdate,'Day, ddth Month, yyyy') as today from students;
+
 
 
 
