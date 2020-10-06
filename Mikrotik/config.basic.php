@@ -3,6 +3,10 @@
 ## Reset Configuration
 	=> /system reset-configuration
 
+## User Configuration
+	=> user print; user add name = username group = full; set 1 password = 123123;
+
+
 
 ## Basic Configuration
 
