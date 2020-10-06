@@ -19,6 +19,7 @@
 # Microsoft.EntityFrameworkCore.SqlServer
 # Microsoft.EntityFrameworkCore.Tools
 # Microsoft.AspNetCore.Mvc.NewtonsoftJson
+# Microsoft.AspNetCore.Authentication.JwtBearer
 
 
 ### Add Connection Settings into appSettings.json file
@@ -70,3 +71,31 @@ public void ConfigureServices(IServiceCollection services)
 
 
 }
+
+.AddJwtBearer(options => {           
+    options.RequireHttpsMetadata = false;           
+    options.SaveToken = true;           
+    options.TokenValidationParameters = new TokenValidationParameters()         
+    {               
+    ValidateIssuer = true,              
+    ValidIssuer = jwtBearerTokenSettings.Issuer,                
+    ValidateAudience = true,                
+    ValidAudience = jwtBearerTokenSettings.Audience,                
+    ValidateIssuerSigningKey = true,                
+    IssuerSigningKey = new SymmetricSecurityKey(key),               
+    ValidateLifetime = true,                
+    ClockSkew = TimeSpan.Zero           
+    };      
+});
+
+
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjIwMzEiLCJyb2xlIjoiTWFuYWdlciIsIm5iZiI6MTYwMTg5OTYxOCwiZXhwIjoxNjAxODk5OTE4LCJpYXQiOjE2MDE4OTk2MTh9.3KJ21samB8G3WfeeO0kQFOvSFwpNFh3ioS6PhBVi6Cw
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjIwMzEiLCJyb2xlIjoiTWFuYWdlciIsIm5iZiI6MTYwMTg5OTcwMCwiZXhwIjoxNjAxOTAwMDAwLCJpYXQiOjE2MDE4OTk3MDB9.7TIHNRMJZl386ZdkcYCUQZTeB1p7cBSj42KqeZBiBYg
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjIwMzEiLCJyb2xlIjoiTWFuYWdlciIsIm5iZiI6MTYwMTg5OTcyNSwiZXhwIjoxNjAxOTAwMDI1LCJpYXQiOjE2MDE4OTk3MjV9.iwryFpmQIcFgBLZSNCdV5LG8pMEBtGOznsCh5sXUMiU
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjIwMzEiLCJyb2xlIjoiTWFuYWdlciIsIm5iZiI6MTYwMTg5OTgxNiwiZXhwIjoxNjAxOTAwMTE2LCJpYXQiOjE2MDE4OTk4MTZ9.LtF3faoHdZTNlLI1HINGsCodWGJUvZH0zyAvFJyt41o
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjIwMzEiLCJyb2xlIjoiTWFuYWdlciIsIm5iZiI6MTYwMTg5OTgzMywiZXhwIjoxNjAxOTAwMTMzLCJpYXQiOjE2MDE4OTk4MzN9.SPN2Xo_jhQ-E4dZJi7Wgtrm2FwedNBvsvCSunpFTl9o
