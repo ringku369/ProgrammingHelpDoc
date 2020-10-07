@@ -6,10 +6,7 @@
 ## User Configuration
 	=> user print; user add name = username group = full; set 1 password = 123123;
 
-
-
 ## Basic Configuration
-
 Interface => IP.Address => IP.DNS => IP.Firewall.NAT => IP.Route
 
 #Step-1 
