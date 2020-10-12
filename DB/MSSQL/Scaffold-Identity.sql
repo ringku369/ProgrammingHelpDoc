@@ -2,6 +2,10 @@
 
 # https://www.codaffection.com/asp-net-core-article/asp-net-core-mvc-login-and-registration-with-identity/
 
+### To Know Identity-Athentication With Role
+
+# https://www.google.com/search?source=hp&ei=QW-EX_iWL9OS9QOegYjYAw&q=asp+net+core+identity+login+with+rolemanager&oq=asp.net+core+identity+login+with+role&gs_lcp=CgZwc3ktYWIQARgCMggIIRAWEB0QHjIICCEQFhAdEB4yCAghEBYQHRAeMggIIRAWEB0QHjIICCEQFhAdEB4yCAghEBYQHRAeMggIIRAWEB0QHjIICCEQFhAdEB4yCAghEBYQHRAeOggIABCxAxDJAzoFCAAQsQM6AggAOggIABCxAxCDAToLCC4QsQMQxwEQowI6BQguELEDOgsILhCxAxDJAxCTAjoFCAAQyQM6AgguOgYIABAWEB46BwgAEMkDEA06BAgAEA06BggAEA0QHjoJCAAQyQMQFhAeUIAUWOWUAWCc4gFoAXAAeAGAAeICiAHrIJIBCDI4LjguMS4xmAEAoAEBqgEHZ3dzLXdperABAA&sclient=psy-ab
+
 ### Package Install
 
 # Microsoft.EntityFrameworkCore.SqlServer
