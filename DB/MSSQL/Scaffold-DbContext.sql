@@ -21,6 +21,8 @@
 # Microsoft.AspNetCore.Mvc.NewtonsoftJson
 # Microsoft.AspNetCore.Authentication.JwtBearer
 
+# Microsoft.AspNetCore.Session // https://www.c-sharpcorner.com/article/how-to-use-session-in-asp-net-core/
+
 
 ### Add Connection Settings into appSettings.json file
 "ConnectionStrings": {
@@ -28,7 +30,8 @@
 }
 
 
-
+AuthDbContext
+ApplicationUser
 
 ### Scaffolding Command - 
 

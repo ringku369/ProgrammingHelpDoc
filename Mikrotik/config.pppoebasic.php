@@ -52,5 +52,8 @@ QUEUES => SimpleQueues => Advance [
 	'Queue Type' => ['2MB-UP', '2MB-DN']
 ];
 
+add name=u24md@gmail.com password=123123 service=pppoe profil
+e=4MB-Profile
+
 
 
