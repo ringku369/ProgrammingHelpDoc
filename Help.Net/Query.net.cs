@@ -31,6 +31,46 @@ GridView1.DataBind();
 
 //Select======
 
+//Select======
+SqlConnection con = new SqlConnection(CS);
+string query = @"select top 1 row_number() over (order by id) as row_number, id, name, code,username, 
+serverip, password, remarks, port,
+(case status when 0 then 'Inactive' else 'Active' end) as status,
+convert(varchar(11),created_at,106) as created_at from ispnetworks where branch_id = '" + branch_id + "' order by id asc";
+SqlCommand cmd = new SqlCommand(query, con);
+con.Open();
+
+SqlDataReader rdr = cmd.ExecuteReader();
+Credential credential = new Credential();
+while (rdr.Read())
+{
+    credential.tikConnectionType = TikConnectionType.Api;
+    credential.name = rdr["name"].ToString();
+    credential.code = rdr["code"].ToString();
+    credential.host = rdr["serverip"].ToString();
+    credential.port = Convert.ToInt32(rdr["port"].ToString());
+    credential.username = rdr["username"].ToString();
+    credential.password = rdr["password"].ToString();
+    
+}
+con.Close();
+return credential;
+//Select======
+
+//Select======
+string chk_query = @"select * from ispclients where ispnetwork_id = '" + ispnetwork_id + "' and isRouter = 0";
+SqlDataReader rdr1 = BaseClass.ExecuteDataRdr(chk_query);
+while (rdr1.Read())
+{
+    int ispclient_id = Convert.ToInt32(rdr1["id"].ToString());
+    string rusername = rdr1["rusername"].ToString();
+    string rpassword = rdr1["rpassword"].ToString();
+    string service = rdr1["service"].ToString();
+    string profile = rdr1["profile"].ToString();
+}
+BaseClass.Con.Close();
+//Select======
+
 
 //Select======
 string ch_query = @"select top 1 id from branches order by id desc";
@@ -39,6 +79,7 @@ DataTable dt = new DataTable();
 dt.Load(rdr);
 int branch_id = Convert.ToInt32(dt.Rows[0]["id"]);
 //int rowCount = dt.Rows.Count;
+
 
 //string name = dt.Rows[0]["name"].ToString();
 BaseClass.Con.Close();

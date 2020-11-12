@@ -54,6 +54,3 @@ QUEUES => SimpleQueues => Advance [
 
 add name=u24md@gmail.com password=123123 service=pppoe profil
 e=4MB-Profile
-
-
-
