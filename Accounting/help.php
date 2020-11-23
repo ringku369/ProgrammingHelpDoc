@@ -1,5 +1,14 @@
 <?php  
 
+Chart Of accounts ==>
+
+=> Assets(Fixedasset(), Currentasset()),
+=> Liabilities(CurrrentLiabilities(), CaptalAccounts()),
+=> Income(DirectIncome(), IndirectIncome()),
+=> Expense(DirectExpense(), IndirectExpense())
+
+
+
 // Balance Sheet 
 
 Liabilities() == Assets();
