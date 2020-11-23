@@ -10,19 +10,25 @@
 # Oracle123
 # 
 #### sql > conn username/password;
+set oracle_sid=testdb
+echo %oracle_sid%
 
+sqlplus / as sysdba
 
 
 show user;
 select * from tab;
 select username from all_users;
 
-select username, created from all_users where username=hr;
+select username,default_tablespace from dba_users where username='MEGHNAHR';
+select username,temporary_tablespace from dba_users where username='MEGHNAHR';
+select username,account_status from dba_users where username='MEGHNAHR';
 
 conn username/password;
 
 
 DROP USER RINGKU CASCADE;
+DROP USER MEGHNAHR CASCADE;
 
 #CREATE USER books_admin IDENTIFIED BY MyPassword;
 
@@ -37,6 +43,10 @@ grant connect, create session, imp_full_database to MEGHNAHR;
 imp MEGHNAHR/Oracle123@ORCL file=<filename>.dmp log=<filename>.log full=y;
 
 imp <username>/<password>@<hostname> file=<filename>.dmp log=<filename>.log full=y;*/
+
+CREATE USER MEGHNAHR IDENTIFIED BY Oracle123 DEFAULT TABLESPACE MEGHNAHR TEMPORARY TABLESPACE TEMP QUOTA 200M on USERS;
+
+
 
 GRANT RESOURCE, CONNECT,
 IMP_FULL_DATABASE,
@@ -99,12 +109,16 @@ exp system/manager file=emp.dmp log=emp_exp.log full=y
 imp system/manager file=emp.dmp log=emp_imp.log full=y
 
 
+EXP meghnahr/Oracle123@ORCL FILE=E:\Orcdb\district.dmp LOG=E:\Orcdb\district.log tables=(district);
+
+EXP meghnahr/meghnahr321@TESTDB FILE=E:\Orcdb\employee.dmp LOG=E:\Orcdb\employee.log tables=employee;
+
 
 
 
 EXP MEGHNAHR/meghnahr321@TESTDB FILE=F:\hrback\meghnahr.dmp LOG=F:\hrback\meghnahr.log;
 
-IMP MEGHNAHR/Oracle123@ORCL FILE=E:\Orcdb\meghnahr.dmp LOG=E:\Orcdb\meghnahr.log FULL=Y;
+IMP MEGHNAHR/Oracle123@TESTDB FILE=E:\Orcdb\meghnahr.dmp LOG=E:\Orcdb\meghnahr.log FULL=Y;
 
 ### For export fulldatabase whith expdp command
 set oracle_sid=orcl
@@ -136,6 +150,10 @@ grant read,write on directory exp_schema to system;
 grant datapump_imp_full_database to system;
 impdp system/Oracle123@testdb directory=exp_schema dumpfile=schema.dmp logfile=schema_exp.log schemas=meghnahr
 
+impdp system/Oracle123@testdb directory=exp_schema dumpfile=meghnahr.dmp logfile=meghnahr.log schemas=meghnahr
+
+impdp system/Oracle123@testdb directory=exp_schema dumpfile=full.dmp logfile=full.log full=y;
+
 
 
 
@@ -151,4 +169,50 @@ impdp system/Oracle123@testdb directory=exp_schema dumpfile=schema.dmp logfile=s
 
 ## To restart oracle service
 # run > services.msc
+
+imp help=y
+
+D:\app\R/admin/testdb/dpdump/
+
+11.2.0.1.0
+11.2.0.3.0
+
+
+### For export tablespace whith expdp command
+
+set oracle_sid=testdb
+echo %oracle_sid%
+
+sqlplus / as sysdba
+SQL>  SELECT   name   FROM   v$tablespace;
+
+create directory exp_tblsp as 'E:\Orcdb\Data Pump\Tablespace Export';
+grant read,write on directory exp_tblsp to hr;
+grant datapump_exp_full_database to hr;
+
+expdp hr/hr@ORCL  DIRECTORY = exp_tblsp  DUMPFILE = tablespace.dmp  LOGFILE = tblsp_log.log 
+ TABLESPACES = USERS,EXAMPLE;
+
+
+### For export tables whith expdp command
+
+set oracle_sid=orcl
+echo %oracle_sid%
+
+sqlplus / as sysdba
+SELECT   name   FROM   v$tablespace;
+
+create directory exp_table as 'E:\Orcdb\Data Pump\Table Export';
+grant read,write on directory exp_table to meghnahr;
+grant datapump_exp_full_database to meghnahr;
+grant EXP_FULL_DATABASE to meghnahr;
+
+expdp meghnahr/Oracle123@ORCL PARFILE='E:\table.par';
+
+expdp meghnahr/Oracle123@ORCL DIRECTORY=exp_table DUMPFILE=dump_file_name.dmp LOGFILE=log_file_name.log TABLES='"district"'
+
+expdp system/Oracle123@ORCL directory=exp_table dumpfile=dump_help.dmp logfile=log_help.log tables=system.'"HELP"';
+
+expdp meghnahr/Oracle123@ORCL directory=exp_table dumpfile=dump_help.dmp logfile=log_help.log tables='district' partition_options=merge;
+
 
