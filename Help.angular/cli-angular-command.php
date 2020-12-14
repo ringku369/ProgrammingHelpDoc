@@ -33,8 +33,17 @@ ng g c home -s -t  --spec=false -d (same command)
 
 // --flat --module=app only for module creating
 
+ng g c components/modal/ -it -is --skip-tests -d
+
+
 ng g module demo-routing --flat // --flat for roort path
 ng g module demo-routing --flat --module=app // --flat for roort path and --module=app for registaring on module.app 
+
+
+ng g c components/admin/dashboard -it -is --skip-tests -d
+ng g c components/admin/dashboard --skip-tests
+
+ng g service services/admin/dashboard --skip-tests -d
 
 //class service is create in root path
 
@@ -55,8 +64,20 @@ ng build --prod
 npm install -save plugin name
 npm i -s bootstrap@4.* jquery@latest ngx-bootstrap
 
+npm install --save font-awesome angular-font-awesome
+
 npm install ngx-bootstrap --save
 ng add ngx-bootstrap
+
+npm i ng2-search-filter --save
+
+
+npm install ngx-toastr --save
+
+npm install @angular/animations --save
+npm install ngx-spinner --save
+ng add ngx-spinner
+
 
 
 
@@ -65,10 +86,15 @@ npm install -save mdb-calendar
 "./node_modules/bootstrap/dist/css/bootstrap.min.css",
 "./node_modules/jquery/dist/jquery.min.js",
 "./node_modules/bootstrap/dist/js/bootstrap.min.js"
+"./node_modules/ngx-toastr/toastr.css"
 
 
 @import '~bootstrap/dist/css/bootstrap.css';
 
+
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+// Import library module
+import { NgxSpinnerModule } from "ngx-spinner";
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';

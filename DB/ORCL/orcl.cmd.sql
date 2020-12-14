@@ -10,6 +10,14 @@
 # Oracle123
 # 
 #### sql > conn username/password;
+
+
+set oracle_sid=orcl
+echo %oracle_sid%
+
+sqlplus / as sysdba
+
+
 set oracle_sid=testdb
 echo %oracle_sid%
 
@@ -20,21 +28,66 @@ show user;
 select * from tab;
 select username from all_users;
 
-select username,default_tablespace from dba_users where username='MEGHNAHR';
-select username,temporary_tablespace from dba_users where username='MEGHNAHR';
-select username,account_status from dba_users where username='MEGHNAHR';
+
+#Tablespace
+
+select name from v$datafile;
+select name from v$tablespace;
+select tablespace_name from dba_tablespaces;
+
+SELECT  FILE_NAME, BLOCKS, TABLESPACE_NAME, FILE_SIZE FROM DBA_DATA_FILES;
+
+SELECT  FILE_NAME, BLOCKS, TABLESPACE_NAME FROM DBA_DATA_FILES WHERE TABLESPACE_NAME = 'USERS';
+D:\APP\R\ORADATA\ORCL\USERS01.DBF
+
+D:\APP\R\ORADATA\ORCL\EXAMPLE01.DBF
+
+F:\11GR2\APP\ADMINISTRATOR\ORADATA\TESTDB\MEGHNA_DEVADM.DBF
+
+
+CREATE TABLESPACE MEGHNAACCOUNTS DATAFILE 'D:\APP\R\ORADATA\ORCL\MEGHNAACCOUNTS01.DBF' SIZE 200M AUTOEXTEND ON; 
+
+
+CREATE TABLESPACE MEGHNAACCOUNTS DATAFILE 'F:\11GR2\APP\ADMINISTRATOR\ORADATA\TESTDB\MEGHNAACCOUNTS.DBF' SIZE 200M AUTOEXTEND ON;
+
+ALTER TABLESPACE MEGHNAACCOUNTS OFFLINE;
+DROP TABLESPACE MEGHNAACCOUNTS;
+
+
+CREATE USER MEGHNAACCOUNTS IDENTIFIED BY Oracle123 DEFAULT TABLESPACE MEGHNAACCOUNTS TEMPORARY TABLESPACE TEMP QUOTA 200M on MEGHNAACCOUNTS;
+
+CREATE USER MEGHNAACCOUNTS IDENTIFIED BY meghnaaccounts321 DEFAULT TABLESPACE MEGHNAACCOUNTS TEMPORARY TABLESPACE TEMP QUOTA 200M on MEGHNAACCOUNTS;
+
+#Tablespace
+
+
+
+
+select username,default_tablespace from dba_users where username='MEGHNAACCOUNTS';
+select username,temporary_tablespace, default_tablespace, account_status from dba_users where username='MEGHNAACCOUNTS';
+select username,account_status from dba_users where username='MEGHNAACCOUNTS';
+
+
+select username,temporary_tablespace, default_tablespace, account_status from dba_users where username='MEGHNA_ACCOUNTS';
+
+SELECT TABLESPACE_NAME "TABLESPACE", EXTENT_MANAGEMENT,FORCE_LOGGING, BLOCK_SIZE, SEGMENT_SPACE_MANAGEMENT FROM DBA_TABLESPACES;
+
 
 conn username/password;
+conn meghnaaccounts/meghnaaccounts321;
 
 
 DROP USER RINGKU CASCADE;
 DROP USER MEGHNAHR CASCADE;
+DROP USER MEGHNAACCOUNTS CASCADE;
 
 #CREATE USER books_admin IDENTIFIED BY MyPassword;
 
 CREATE USER RINGKU IDENTIFIED BY Oracle123;
 
 CREATE USER MEGHNAHR IDENTIFIED BY Oracle123;
+
+CREATE USER MEGHNAACCOUNTS IDENTIFIED BY meghnaaccounts321;
 
 /*create user MEGHNAHR identified by Oracle123 default tablespace MEGHNAHR 
 	quota unlimited on MEGHNAHR;
@@ -44,8 +97,12 @@ imp MEGHNAHR/Oracle123@ORCL file=<filename>.dmp log=<filename>.log full=y;
 
 imp <username>/<password>@<hostname> file=<filename>.dmp log=<filename>.log full=y;*/
 
-CREATE USER MEGHNAHR IDENTIFIED BY Oracle123 DEFAULT TABLESPACE MEGHNAHR TEMPORARY TABLESPACE TEMP QUOTA 200M on USERS;
+CREATE USER MEGHNAHR IDENTIFIED BY Oracle123 DEFAULT TABLESPACE MEGHNAHR TEMPORARY TABLESPACE TEMP QUOTA 20000M on USERS;
 
+CREATE USER MEGHNAACCOUNTS IDENTIFIED BY Oracle123 DEFAULT TABLESPACE MEGHNAACCOUNTS TEMPORARY TABLESPACE TEMP QUOTA 200M on MEGHNAACCOUNTS;
+
+
+CREATE tablespace maccouts
 
 
 GRANT RESOURCE, CONNECT,
@@ -93,7 +150,7 @@ DROP ANY CUBE,
 SELECT ANY TABLE, 
 SELECT ANY SEQUENCE, 
 SELECT ANY TRANSACTION,
-UPDATE ANY TABLE TO MEGHNAHR;
+UPDATE ANY TABLE TO MEGHNAACCOUNTS;
 
 
 #### cmd >
