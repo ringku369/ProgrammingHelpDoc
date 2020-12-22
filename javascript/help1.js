@@ -121,3 +121,66 @@ function myFunction(num) {
 
 
 
+
+$('#subscribeForm').on('submit',function(event){
+  event.preventDefault();
+
+
+  let url = $(this).attr('action');
+  let method = $(this).attr('method');
+  let formdata = $(this).serialize();
+
+  //console.log(formdata);
+
+  let success_area = $('.successMsg1');
+  let error_area = $('.errorMsg1');
+  let submitBtn = $('.submitBtn1');
+  let faLoader = $('.faLoader');
+
+  submitBtn.attr({disabled: 'disabled'});
+  faLoader.css({display: 'block'});
+
+  $.ajax({
+    url: url,
+    type:method,
+    data:formdata,
+    success:function(response){
+      faLoader.css({display: 'none'});
+      success_area.find('.alert-success').remove();
+      error_area.find('.alert-danger').remove();
+      submitBtn.removeAttr('disabled');
+      success_area.append(
+        '<div class="alert alert-success alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'+response.success+'</div>'
+        );
+      $("#subscribeForm :input[type='text'], :input[type='email'], textarea[name='experience']").val('');
+
+    },
+    error: function(xhr,status,error ) {
+      faLoader.css({display: 'none'});
+      submitBtn.removeAttr('disabled');
+      errorMsg(xhr.responseJSON,error_area);
+      console.log(xhr);
+      console.log(status);
+      console.log(error);
+    }
+
+  });
+
+  function errorMsg(msg,errorArea){
+    success_area.find('.alert-success').remove();
+    errorArea.find('.alert-danger').remove();
+    for (let index = 0; index < msg.length; index++) {
+      const element = msg[index];
+      errorArea.append(
+        '<div class="alert alert-danger alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'+element+'</div>'
+      );
+    }
+  }
+
+});
+
+
+
+
+
+

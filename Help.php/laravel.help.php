@@ -452,13 +452,57 @@ $d=cal_days_in_month(CAL_GREGORIAN,date('m'),date('Y'));
   dd($datalist);
 //------------------------------------
 
+
+
+public function SubscribeStore(Request $request){
+    
+  $rules  =  array(
+    'name'=>'required|max:128',
+    'email'=>'required|max:56',
+    'contact'=>'required|max:16',
+    'subject'=>'required|max:256',
+    'experience'=>'required|max:512',
+  );
+  
+  $validator = Validator::make( $request->all(),$rules);
+
+  if ($validator->fails())
+  {
+    $messages = $validator->errors();
+    return response()->json($messages->all(),400,[],JSON_PRETTY_PRINT);
+  }
+
+
+  $request['status'] = 2;
+
+  Register::create($request->all());
+
+  //$returndata = ["email or password does not match, pls try again"];
+  //return response()->json($returndata, 400,[],JSON_PRETTY_PRINT);
+
+  $this->sendMailToUser($request->all());
+  $this->sendMailToAdmin($request->all());
+
+
+  //sleep(5);
+  $returndata['success'] = ["Congratulations ! Your Query Successfully Placed"];
+  return response()->json($returndata, 200,[],JSON_PRETTY_PRINT);
+}
+
+
+
+
+
+
+
+
+
 ?>
 
 
 
 
 <table>
-  
   <tbody>
       <tr>
         <td colspan="11">
@@ -466,10 +510,21 @@ $d=cal_days_in_month(CAL_GREGORIAN,date('m'),date('Y'));
         </td>
       </tr>
   </tbody>
-
 </table>
 
 
-<div class="table-responsive1" style="overflow-x: scroll;overflow-y: scroll; height: 250px;white-space:nowrap; width:100%"> </div>
+<div class="table-responsive1" style="overflow-x: scroll;overflow-y: scroll; height: 250px;white-space:nowrap; width:100%; margin-bottom: 50px"> </div>
+
+
+
+<button class="btn primary-button submitBtn1"><i class="icon-rocket"></i>
+    SEND
+    <span style="color:red; display: none;margin-left: 10px;" class="faLoader"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i> wait... </span>
+</button>
+
+
+
+
+
 
 
