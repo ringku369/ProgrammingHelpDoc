@@ -183,4 +183,9 @@ $('#subscribeForm').on('submit',function(event){
 
 
 
+pcoded-navbar menu-light menupos-static
+pcoded-navbar menu-light menupos-static mob-open
 
+pcoded-navbar menu-light menupos-static
+
+pcoded-navbar menu-light menupos-static navbar-collapsed

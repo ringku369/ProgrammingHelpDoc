@@ -169,3 +169,27 @@ BEGIN
   END IF;
 
 END;
+
+
+
+### citylogs
+CREATE TABLE citylogs (
+  username VARCHAR(64) NULL,
+  city_id NUMBER (4) NOT NULL,
+  name VARCHAR(128) NULL,
+  code VARCHAR(128) NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE OR REPLACE TRIGGER AUP_CITIES_TRIGGER
+AFTER UPDATE ON CITIES FOR EACH ROW
+DECLARE username VARCHAR2(64);
+BEGIN
+    IF :NEW.NAME <> :OLD.NAME
+    THEN
+        INSERT INTO CITYLOGS (city_id,name,code,username) VALUES  (:OLD.ID,:OLD.NAME,:OLD.CODE,username);
+    END IF;
+END;
+
+### citylogs
+#

@@ -109,9 +109,7 @@ class Crud extends AnotherClass
 				$brand->delete();
 				return redirect()->back()->with('success', 'Data has been deleted successfully');
 			}
-
-
-		}
+	}
 		
 
  
