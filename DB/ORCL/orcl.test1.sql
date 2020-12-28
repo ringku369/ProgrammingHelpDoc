@@ -479,6 +479,36 @@ END;
 
 
 
+
+
+CREATE SEQUENCE AI_SEQ_LOGS START WITH 1 MINVALUE 1 MAXVALUE 9999999999999999999999999999999999999;
+
+
+
+CREATE OR REPLACE TRIGGER AI_JOURNALPOSTLOGS_TR
+BEFORE INSERT ON JOURNALPOSTLOGS FOR EACH ROW
+
+BEGIN
+  IF INSERTING THEN
+  	SELECT AI_SEQ_LOGS.NEXTVAL INTO   :NEW.ID FROM   dual;
+  END IF;
+
+END;
+
+CREATE OR REPLACE TRIGGER AI_JOURNALPOSTDETAILLOGS_TR
+BEFORE INSERT ON JOURNALPOSTDETAILLOGS FOR EACH ROW
+
+BEGIN
+  IF INSERTING THEN
+  	SELECT AI_SEQ_LOGS.NEXTVAL INTO   :NEW.ID FROM   dual;
+  END IF;
+
+END;
+
+drop trigger AI_JOURNALPOSTLOGS_TR;
+drop trigger AI_JOURNALPOSTDETAILLOGS_TR;
+
+
 CREATE OR REPLACE TRIGGER A_IN_UP_DEL_OPENINGBALANCES_TR
 AFTER INSERT OR UPDATE OR DELETE ON OPENINGBALANCES FOR EACH ROW
 DECLARE username VARCHAR2(64);
@@ -487,9 +517,11 @@ BEGIN
   IF INSERTING THEN
     DBMS_OUTPUT.PUT_LINE('ONE ROW INSERTED BY : ' || username);
   ELSIF UPDATING THEN
-    INSERT INTO OPENINGBALANCELOGS (id,upuser_id,chartofaccount_id,project_id,opndebit,opncredit,status) VALUES  (:OLD.id,:NEW.upuser_id,:NEW.chartofaccount_id,:NEW.project_id,:OLD.opndebit,:OLD.opncredit,'2');
+    IF :NEW.LS = :OLD.LS THEN
+        INSERT INTO OPENINGBALANCELOGS (openingbalance_id,upuser_id,chartofaccount_id,project_id,opndebit,opncredit,status) VALUES  (:OLD.id,:OLD.upuser_id,:OLD.chartofaccount_id,:OLD.project_id,:OLD.opndebit,:OLD.opncredit,'2');
+    END IF;
   ELSIF DELETING THEN
-    INSERT INTO OPENINGBALANCELOGS (id,upuser_id,chartofaccount_id,project_id,opndebit,opncredit,status) VALUES  (:OLD.id,:NEW.upuser_id,:NEW.chartofaccount_id,:NEW.project_id,:OLD.opndebit,:OLD.opncredit,'3');
+    INSERT INTO OPENINGBALANCELOGS (openingbalance_id,upuser_id,chartofaccount_id,project_id,opndebit,opncredit,status) VALUES  (:OLD.id,:OLD.upuser_id,:OLD.chartofaccount_id,:OLD.project_id,:OLD.opndebit,:OLD.opncredit,'3');
   END IF;
 END;
 
@@ -498,9 +530,10 @@ END;
 CREATE TABLE OPENINGBALANCELOGS (
 
 	id NUMBER NULL,
+	openingbalance_id NUMBER NULL,
 	upuser_id NUMBER NULL,
-	CHARTOFACCOUNT_ID NUMBER NULL,
-	PROJECT_ID NUMBER NULL,
+	chartofaccount_id NUMBER NULL,
+	project_id NUMBER NULL,
 
 	opndebit NUMBER DEFAULT 0,
 	opncredit NUMBER DEFAULT 0,
@@ -508,17 +541,127 @@ CREATE TABLE OPENINGBALANCELOGS (
 	createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE OPENINGBALANCELOGS
-ADD CHARTOFACCOUNT_ID NUMBER NULL;
-ADD PROJECT_ID NUMBER NULL;
+ALTER TABLE JOURNALPOSTS
+ADD LS NUMBER (1) DEFAULT 0;
+
+ALTER TABLE JOURNALPOSTDETAILS
+fyear_id NUMBER DEFAULT 1;
 
 TRUNCATE TABLE OPENINGBALANCELOGS;
 DROP TABLE OPENINGBALANCELOGS;
 DROP TRIGGER A_IN_UP_DEL_OPENINGBALANCES_TR;
 
 
+TRUNCATE TABLE OPENINGBALANCELOGS;
+
+
 SELECT * FROM OPENINGBALANCES;
 SELECT * FROM OPENINGBALANCELOGS;
-UPDATE OPENINGBALANCES SET OPNDEBIT = 4000, UPUSER_ID = 283 WHERE ID = 23;
+UPDATE OPENINGBALANCES SET OPNDEBIT = 1000, UPUSER_ID = 283, LS = 0 WHERE ID = 30;
 INSERT INTO OPENINGBALANCES (USER_ID,CHARTOFACCOUNT_ID,PROJECT_ID,OPNDEBIT,OPNCREDIT) VALUES (283,65,22,2000,0);
-DELETE FROM OPENINGBALANCES WHERE ID = 25;
+DELETE FROM OPENINGBALANCES WHERE ID = 29;
+
+drop TABLE JOURNALPOSTLOGS;
+
+CREATE TABLE JOURNALPOSTLOGS (
+
+	id NUMBER (20) NOT NULL PRIMARY KEY,
+	journalpost_id NUMBER NULL,
+	fyear_id NUMBER NULL,
+	project_id NUMBER NULL,
+	branch_id NUMBER NULL,
+  upuser_id NUMBER NULL,
+  vchno NVARCHAR2(64) NULL,
+  narration NVARCHAR2(256) NULL,
+  vchdate DATE NULL,
+  vchtype_id NUMBER NULL,
+	debit NUMBER DEFAULT 0,
+	credit NUMBER DEFAULT 0,
+	status NUMBER (1) DEFAULT 1,
+	createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE JOURNALPOSTDETAILLOGS (
+
+	id NUMBER (20) NOT NULL PRIMARY KEY,
+	journalpostdetail_id NUMBER (20) NOT NULL,
+	chartofaccount_id NUMBER NOT NULL,
+	journalpost_id NUMBER NULL,
+	fyear_id NUMBER NULL,
+	project_id NUMBER NULL,
+	branch_id NUMBER NULL,
+  upuser_id NUMBER NULL,
+  vchno NVARCHAR2(64) NULL,
+  narration NVARCHAR2(256) NULL,
+  vchdate DATE NULL,
+  vchtype_id NUMBER NULL,
+	debit NUMBER DEFAULT 0,
+	credit NUMBER DEFAULT 0,
+	status NUMBER (1) DEFAULT 1,
+	createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE OR REPLACE TRIGGER A_IN_UP_DEL_JOURNALPOSTS_TR
+AFTER INSERT OR UPDATE OR DELETE ON JOURNALPOSTS FOR EACH ROW
+DECLARE username VARCHAR2(64);
+BEGIN
+  SELECT user INTO username FROM dual;
+  IF INSERTING THEN
+    DBMS_OUTPUT.PUT_LINE('ONE ROW INSERTED BY : ' || username);
+  ELSIF UPDATING THEN
+    IF :NEW.LS = :OLD.LS THEN
+        INSERT INTO JOURNALPOSTLOGS (journalpost_id,fyear_id,project_id,branch_id,upuser_id,vchno,
+        	narration,vchdate,vchtype_id,debit,credit,status) VALUES  (
+        	:OLD.id,:OLD.fyear_id,:OLD.project_id,:OLD.branch_id,
+        	:OLD.upuser_id,:OLD.vchno,:OLD.narration,:OLD.vchdate,:OLD.vchtype_id,
+        	:OLD.debit,:OLD.credit,'2');
+    END IF;
+  ELSIF DELETING THEN
+    INSERT INTO JOURNALPOSTLOGS (journalpost_id,fyear_id,project_id,branch_id,upuser_id,vchno,
+        	narration,vchdate,vchtype_id,debit,credit,status) VALUES  (
+        	:OLD.id,:OLD.fyear_id,:OLD.project_id,:OLD.branch_id,
+        	:OLD.upuser_id,:OLD.vchno,:OLD.narration,:OLD.vchdate,:OLD.vchtype_id,
+        	:OLD.debit,:OLD.credit,'3');
+  END IF;
+END;
+
+
+
+
+CREATE OR REPLACE TRIGGER A_IN_UP_DEL_JOURPOSTDETAILS_TR
+AFTER INSERT OR UPDATE OR DELETE ON JOURNALPOSTDETAILS FOR EACH ROW
+DECLARE username VARCHAR2(64);
+BEGIN
+  SELECT user INTO username FROM dual;
+  IF INSERTING THEN
+    DBMS_OUTPUT.PUT_LINE('ONE ROW INSERTED BY : ' || username);
+  ELSIF UPDATING THEN
+    IF :NEW.LS = :OLD.LS THEN
+        INSERT INTO JOURNALPOSTDETAILLOGS (journalpostdetail_id,chartofaccount_id,journalpost_id,
+        	fyear_id,project_id,branch_id,upuser_id,vchno,
+        	remarks,vchdate,vchtype_id,debit,credit,status) VALUES  (
+        	:OLD.id,:OLD.chartofaccount_id,:OLD.journalpost_id,:OLD.fyear_id,:OLD.project_id,
+        	:OLD.branch_id,:OLD.upuser_id,:OLD.vchno,:OLD.remarks,:OLD.vchdate,
+        	:OLD.vchtype_id,:OLD.debit,:OLD.credit,'2');
+    END IF;
+  ELSIF DELETING THEN
+    INSERT INTO JOURNALPOSTDETAILLOGS (journalpostdetail_id,chartofaccount_id,journalpost_id,
+        	fyear_id,project_id,branch_id,upuser_id,vchno,
+        	remarks,vchdate,vchtype_id,debit,credit,status) VALUES  (
+        	:OLD.id,:OLD.chartofaccount_id,:OLD.journalpost_id,:OLD.fyear_id,:OLD.project_id,
+        	:OLD.branch_id,:OLD.upuser_id,:OLD.vchno,:OLD.remarks,:OLD.vchdate,
+        	:OLD.vchtype_id,:OLD.debit,:OLD.credit,'3');
+  END IF;
+END;
+
+
+
+
+select * from JOURNALPOSTS;
+select * from JOURNALPOSTDETAILS;
+
+select * from JOURNALPOSTLOGS;
+update JOURNALPOSTS set narration = 'updated text' where id = 21;
+
+DELETE FROM JOURNALPOSTS WHERE ID = 21;
+DELETE FROM JOURNALPOSTDETAILS WHERE journalpost_id = 21;
