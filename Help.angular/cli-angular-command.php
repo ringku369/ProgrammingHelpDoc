@@ -43,7 +43,15 @@ ng g module demo-routing --flat --module=app // --flat for roort path and --modu
 ng g c components/admin/dashboard -it -is --skip-tests -d
 ng g c components/admin/dashboard --skip-tests
 
+ng g c components/admin/dashboard --skip-tests -d
+
+
 ng g service services/admin/dashboard --skip-tests -d
+
+ng g service services/admin/admin-dashboard --skip-tests
+
+
+ng g interceptor services/error --skip-tests -d
 
 //class service is create in root path
 
