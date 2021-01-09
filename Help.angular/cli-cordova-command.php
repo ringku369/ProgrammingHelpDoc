@@ -12,7 +12,7 @@ $ npm install -g cordova ionic
 4 - npx cap init
 5 - npx cap add android
 6 - npx cap copy android
-7 -npx cap open android
+7 - npx cap open android
 
 
 

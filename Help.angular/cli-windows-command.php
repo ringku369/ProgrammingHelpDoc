@@ -1,5 +1,7 @@
 <?php  
 
+environment > advance// for edit path
+
 // windows command
 cd .. // go back to before folder from current folder
 ls  // list show files

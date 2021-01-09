@@ -552,6 +552,11 @@ string query = @"select top 50 row_number() over (order by t1.id) as rownumber,
         Label17.Text = grandtotal.ToString(this._crcd, new CultureInfo(this._cr));
 
 
+
+        Label17.Text = grandtotal.ToString("C2",new CultureInfo("bn-BD"));
+        Label17.Text = grandtotal.ToString("N2",new CultureInfo("bn-BD"));
+
+
         Text='<%# Bind("quantity", "{0:N0}") %>'
 
         DataFormatString="{0:C}"
