@@ -12,7 +12,7 @@ $ npm install -g cordova ionic
 4 - npx cap init
 5 - npx cap add android
 6 - npx cap copy android
-7 - npx cap open android
+7 -npx cap open android
 
 
 
@@ -28,9 +28,27 @@ cordova build android --release -- --keystore="..\android.keystore" --storePassw
 cordova config ls
 
 
+
+
+$ ng add @ionic/angular
+$ ionic init
+$ project-name
+$ ionic cordova run android --project="www" --no-native-run --verbose
+
+
+
 cordova create mobile
 cordova platform add android
 cordova build android
 cordova run android
+
+
+
+npm install -g @ionic/cli native-run cordova-res
+ionic start photo-gallery tabs --type=angular --capacitor
+
+npm i -s @ionic/pwa-elements
+
+npm install @ionic/pwa-elements --save
 
 ?>

@@ -18,6 +18,7 @@ npm cache clean --force
 
 
 npm install -g @angular/cli@latest
+ng help
 ng new --help
 ng new projectname - d
 ng new projectname --routing --style=scss
@@ -69,22 +70,22 @@ ng add @angular/material
 ng build --prod
 
 //package.json > dependencies
-npm install -save plugin name
-npm i -s bootstrap@4.* jquery@latest ngx-bootstrap
+npm install @angular/animations --save
 
-npm install --save font-awesome angular-font-awesome
-
-npm install ngx-bootstrap --save
+ng add ngx-spinner
 ng add ngx-bootstrap
 
-npm i ng2-search-filter --save
-
-
 npm install ngx-toastr --save
-
-npm install @angular/animations --save
 npm install ngx-spinner --save
-ng add ngx-spinner
+npm install @angular/animations --save
+
+
+npm i -s bootstrap@4.* jquery@latest ngx-bootstrap font-awesome angular-font-awesome @angular/animations
+
+npm install ngx-bootstrap --save
+
+
+npm i ng2-search-filter --save
 
 
 
@@ -92,28 +93,49 @@ ng add ngx-spinner
 npm install -save mdb-calendar
 // angular.json
 "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+"./node_modules/ngx-toastr/toastr.css"
+
 "./node_modules/jquery/dist/jquery.min.js",
 "./node_modules/bootstrap/dist/js/bootstrap.min.js"
-"./node_modules/ngx-toastr/toastr.css"
 
 
 @import '~bootstrap/dist/css/bootstrap.css';
 
 
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-// Import library module
-import { NgxSpinnerModule } from "ngx-spinner";
 
+
+
+import { NgModule,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { CommonModule } from '@angular/common';
-import { ToastrModule } from 'ngx-toastr';
-
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { ToastrModule } from 'ngx-toastr';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    HttpClientModule,
+    CommonModule,
+    BsDatepickerModule,
+    NgxSpinnerModule,
+    ToastrModule.forRoot(),
+  ],
+  providers: [],
+  schemas : [CUSTOM_ELEMENTS_SCHEMA],
+  bootstrap: [AppComponent]
+})
 
 
 
@@ -125,6 +147,20 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 //     this.errors = error.error;
 //   }
 // );
+
+ionic cordova plugin add cordova-plugin-qrscanner
+npm install @ionic-native/qr-scanner
+
+providers: [
+  StatusBar,
+  SplashScreen,
+  QRScanner,
+  { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+],
+
+
+ionic cordova plugin add cordova-plugin-inappbrowser
+npm install @ionic-native/in-app-browser
 
 
 

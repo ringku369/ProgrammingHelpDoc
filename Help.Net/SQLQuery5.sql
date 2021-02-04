@@ -331,9 +331,9 @@ CREATE TABLE countries (
 CREATE TABLE cities (
 
 	id BIGINT IDENTITY(1,1) PRIMARY KEY,
-	country_ID INT NOT NULL,
+	country_id INT NOT NULL,
 	name NVARCHAR(128) NULL,
-	FOREIGN KEY (country_ID) REFERENCES countries(id),
+	//FOREIGN KEY (country_id) REFERENCES countries(id),
 )
 
 
@@ -355,8 +355,149 @@ CREATE TABLE cities (
 	name NVARCHAR(128) NULL,
 	created_at DATETIME DEFAULT GETDATE(),
 	updated_at DATETIME DEFAULT GETDATE(),
-	FOREIGN KEY (country_id) REFERENCES countries(id)
+	//FOREIGN KEY (country_id) REFERENCES countries(id)
 )
+
+CREATE TABLE departments (
+
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	name NVARCHAR(128) NULL,
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE()
+)
+
+
+CREATE TABLE stidents (
+
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	code BIGINT DEFAULT (((ident_current('stidents')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	
+	country_id BIGINT NOT NULL,
+	city_id BIGINT NOT NULL,
+	village_id BIGINT NOT NULL,
+	department_id BIGINT NOT NULL,
+	name NVARCHAR(128) NULL,
+	email NVARCHAR(128) NULL,
+	father NVARCHAR(64) NULL,
+	mother NVARCHAR(64) NULL,
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
+)
+
+
+
+
+CREATE TABLE categories (
+
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	code BIGINT DEFAULT (((ident_current('categories')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	name NVARCHAR(128) NULL,
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
+)
+
+CREATE TABLE subcategories (
+
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	code BIGINT DEFAULT (((ident_current('subcategories')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	category_id BIGINT NOT NULL,
+	name NVARCHAR(128) NULL,
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
+)
+
+
+CREATE TABLE maincategories (
+
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	code BIGINT DEFAULT (((ident_current('maincategories')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	subcategory_id BIGINT NOT NULL,
+	name NVARCHAR(128) NULL,
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
+)
+
+
+CREATE TABLE products (
+
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	code BIGINT DEFAULT (((ident_current('products')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	maincategory_id BIGINT NOT NULL,
+	name NVARCHAR(128) NULL,
+
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
+)
+
+
+CREATE TABLE purchases (
+
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	code BIGINT DEFAULT (((ident_current('purchases')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	
+	vchno NVARCHAR(128) NULL,
+
+	totalprice decimal(18, 2) DEFAULT 0,
+	totalqty decimal(18, 2) DEFAULT 0,
+
+	remarks NVARCHAR(128) NULL,
+	status BIT DEFAULT 1,
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
+)
+
+CREATE TABLE purchasedetails (
+
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	code BIGINT DEFAULT (((ident_current('purchasedetails')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	purchase_id BIGINT NOT NULL,
+	product_id BIGINT NOT NULL,
+
+	price decimal(18, 2) DEFAULT 0,
+	qty decimal(18, 2) DEFAULT 0,
+	status BIT DEFAULT 1,
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
+)
+
+
+CREATE TABLE sales (
+
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	code BIGINT DEFAULT (((ident_current('sales')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	vchno NVARCHAR(128) NULL,
+
+	product_id BIGINT NOT NULL,
+
+	totalprice decimal(18, 2) DEFAULT 0,
+	totalqty decimal(18, 2) DEFAULT 0,
+
+	remarks NVARCHAR(128) NULL,
+
+	status BIT DEFAULT 1,
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
+)
+
+CREATE TABLE saledetails (
+
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	code BIGINT DEFAULT (((ident_current('sales')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	sale_id BIGINT NOT NULL,
+	product_id BIGINT NOT NULL,
+
+	price decimal(18, 2) DEFAULT 0,
+	qty decimal(18, 2) DEFAULT 0,
+	status BIT DEFAULT 1,
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
+)
+
+
+
+
+
+
 
 Insert into countries values('Bangladesh')
 Insert into countries values('India')
