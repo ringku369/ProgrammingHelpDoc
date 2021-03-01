@@ -5,6 +5,13 @@ $ npm cache clean -f
 $ npm install -g cordova ionic
 
 
+cordova --version
+
+
+ionic cordova plugin add cordova-plugin-geolocation
+npm install @ionic-native/geolocation
+
+
 1 - npm install -- save @capacitor/core @capacitor/cli
 2 - open file angular.json and change from  "outputPath" : "dist/{{nameApp}}" to be 
 "outputPath" : "www"
@@ -35,7 +42,7 @@ $ ionic init
 $ project-name
 $ ionic cordova run android --project="www" --no-native-run --verbose
 
-
+ionic cordova build android
 
 cordova create mobile
 cordova platform add android

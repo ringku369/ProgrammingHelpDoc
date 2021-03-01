@@ -6,9 +6,15 @@ http://guides.beanstalkapp.com/version-control/common-git-commands.html
 https://codeshare.co.uk/blog/how-to-solve-the-github-error-fatal-httprequestexception-encountered/
 
 
+// Set Credential 
+
+git config --global credential.helper manager-core
+
+
 // For download 
 
 git clone https://github.com/ringku369/ProgrammingHelpDoc.git
+git clone https://github.com/ringku369/jstree.git
 
 git init
 git add README.md
