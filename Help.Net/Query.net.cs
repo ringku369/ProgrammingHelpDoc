@@ -97,6 +97,20 @@ BaseClass.Con.Close();
 //Insert======
 
 
+//Update======
+string query3 = @"update productsummaries set product_id = @product_id,
+branch_id = branch_id where id = '" + _id + "'";
+SqlCommand cmd3 = BaseClass.CommandBuilder(query3);
+//cmd3.CommandType = System.Data.CommandType.StoredProcedure;
+cmd3.Parameters.AddWithValue("@product_id", product_id);
+cmd3.Parameters.AddWithValue("@branch_id", branch_id);
+cmd3.ExecuteNonQuery();
+BaseClass.Con.Close();
+//Update======
+
+
+
+
 //Delete======
 string dlquery = @"delete from productsummaries where branch_id = '" + _id + "' ";
 SqlCommand cmd3 = BaseClass.CommandBuilder(dlquery);
