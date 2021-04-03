@@ -2,7 +2,7 @@
 
 use ispm;
 
-
+//isp
 
 truncate table isppackages;
 
@@ -16,6 +16,18 @@ truncate table ispclientinvoices;
 truncate table ispclientpayments;
 
 
+// accounts
+truncate table accfyears;
+truncate table accrelations;
+truncate table acchcrmaps;
+
+truncate table accjourposts;
+truncate table accjourpostdetails;
+
+
+// invetory
+
+truncate table warehouses;
 truncate table catfirsts;
 truncate table catseconds;
 truncate table catthirds;
@@ -32,6 +44,30 @@ truncate table saledetails;
 
 
 
+// common tables
+
+truncate table users;
+truncate table usermenus;
+truncate table userlogs;
+truncate table triggerdeleteusers;
+
+
+delete from users;
+delete from usermenus;
+delete from userlogs;
+delete from triggerdeleteusers;
+
+
+
+select * from users;
+select * from usermenus;
+select * from userlogs;
+select * from triggerdeleteusers;
+
+
+
+// isp
+
 delete from isppackages;
 
 delete from ispnetworks;
@@ -44,20 +80,36 @@ delete from ispclientinvoices;
 delete from ispclientpayments;
 
 
-delete table catfirsts;
-delete table catseconds;
-delete table catthirds;
+// inventory
 
-delete table products;
+delete from warehouses;
 
-delete table productsummaries;
+delete from catfirsts;
+delete from catseconds;
+delete from catthirds;
 
-delete table purchases;
-delete table purchasedetails;
+delete from products;
 
-delete table sales;
-delete table saledetails;
+delete from productsummaries;
 
+delete from purchases;
+delete from purchasedetails;
+
+delete from sales;
+delete from saledetails;
+
+
+// accounts
+delete from accfyears;
+delete from accrelations;
+delete from acchcrmaps;
+
+delete from accjourposts;
+delete from accjourpostdetails;
+
+
+
+// isp
 
 select * from ispnetworks;
 select * from ispzones;
@@ -73,6 +125,8 @@ select * from users;
 
 
 
+// inventory
+select * from  warehouses;
 
 select * from  catfirsts;
 select * from  catseconds;
@@ -88,7 +142,69 @@ select * from  purchasedetails;
 select * from  sales;
 select * from  saledetails;
 
+select * from proavamounts;
+select * from  userwhmaps;
 
+
+
+// accounts
+
+select * from accfyears;
+
+select * from accjournalaccounts;
+select * from accjaopenbalances;
+select * from accjourposts;
+select * from accjourpostdetails;
+
+
+select * from accrelations;
+select * from acchcrmaps;
+
+
+
+
+
+
+// Required
+delete from accjourposts;
+delete from accjourpostdetails;
+
+delete from purchases;
+delete from purchasedetails;
+
+delete from sales;
+delete from saledetails;
+
+select * from accjourposts;
+select * from accjourpostdetails;
+
+select * from  purchases;
+select * from  purchasedetails;
+
+select * from  sales;
+select * from  saledetails;
+
+select * from accjourposts;
+select * from  purchases;
+select * from  sales;
+
+select * from  userwhmaps;
+
+
+select * from accjournalaccounts;
+select * from accjaopenbalances;
+
+
+
+
+
+
+
+
+SaleToAccounts
+
+UserWarehouseMap
+AccChartofAccWHMap
 
 
 
@@ -102,3 +218,62 @@ update products set catfirst_id = null, catsecond_id = null;
 
 from ispclients as t1 
 join isppackages as t2 on t2.id = t1.isppackage_id
+
+
+// stock report query
+select ((CASE when sum(t1.quantity) IS NULL  then 0 
+else ((select distinct opening_qty from products 
+where id = 6 and branch_id =  9)+ 
+sum(t1.quantity)) end) - (select (case when sum(t2.quantity) IS NULL then 0 else sum(t2.quantity) end) 
+from saledetails as t2 where t2.product_id = 6  AND t2.branch_id = 9)) as roqty 
+from purchasedetails as t1 where t1.product_id = 6  AND t1.branch_id = 9
+
+
+select t1.id as id, t1.accjournalaccount_id as accjournalaccount_id, t1.ptstatus as ptstatus, t2.name name
+from acchcrmaps as t1
+join accrelations as t2 on t2.id = t1.accrelation_id
+where t2.name = 'Inventory Purchase' and ptstatus = 'Debit'
+
+select t1.id as id, t1.accjournalaccount_id as accjournalaccount_id, t1.ptstatus as ptstatus, t2.name name
+from acchcrmaps as t1
+join accrelations as t2 on t2.id = t1.accrelation_id
+where t2.name = 'Inventory Purchase' and ptstatus = 'Credit'
+
+
+delete from accjourposts;
+delete from accjourpostdetails;
+update purchases set accstatus = 0
+
+
+
+truncate table usermenus;
+delete from usermenus;
+
+select * from usermenus;
+
+select * from users;
+
+insert into usermenus (user_id,parent,child,nurl,status) values (30057,'Configaration','Configaration','#',1);
+
+delete from usermenus where id not in(1,4,5,10,12,13);
+
+delete from usermenus where id = 8;
+
+select * from usermenus where user_id = 30057 AND status = 1
+
+select * from usermenus where user_id = 30057 AND parent='Configaration' AND child<> 'Configaration'
+
+
+
+//VS query
+
+select top 10 * from new_job_cart where vtxno is not null;
+select top 1 * from payment where job_no=5621;
+
+
+select top 100 * from cash_voucher_det where tx_no=7101;
+select top 1 * from cash_voucher_det where tx_no=7102;
+
+
+
+select top 1 * from cash_voucher_det where tx_no=7102;

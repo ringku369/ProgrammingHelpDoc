@@ -495,6 +495,55 @@ CREATE TABLE saledetails (
 
 
 
+CREATE TABLE accrelations (
+
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	branch_id BIGINT DEFAULT NULL,
+	code BIGINT DEFAULT (((ident_current('accrelations')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	name NVARCHAR(128) NULL,
+	
+	status BIT DEFAULT 1,
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
+)
+
+
+
+CREATE TABLE acchcrmaps (
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	branch_id BIGINT DEFAULT NULL,
+	code BIGINT DEFAULT (((ident_current('acchcrmaps')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	accrelation_id BIGINT DEFAULT NULL,
+	accjournalaccount_id BIGINT DEFAULT NULL,
+	status BIT DEFAULT 1,
+	created_at DATETIME DEFAULT getdate(),
+	updated_at DATETIME DEFAULT getdate(),
+)
+
+
+CREATE TABLE stores (
+
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	branch_id BIGINT DEFAULT NULL,
+	code BIGINT DEFAULT (((ident_current('stores')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	name NVARCHAR(128) NULL,
+	
+	status BIT DEFAULT 1,
+	created_at DATETIME DEFAULT GETDATE(),
+	updated_at DATETIME DEFAULT GETDATE(),
+)
+
+
+CREATE TABLE accfyears (
+	id BIGINT IDENTITY(1,1) PRIMARY KEY,
+	branch_id BIGINT DEFAULT NULL,
+	code BIGINT DEFAULT (((ident_current('accfyears')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+	fromdate DATE DEFAULT getdate(),
+	todate DATE DEFAULT getdate(),
+	status BIT DEFAULT 1,
+	created_at DATETIME DEFAULT getdate(),
+	updated_at DATETIME DEFAULT getdate(),
+)
 
 
 
