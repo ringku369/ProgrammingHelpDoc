@@ -104,6 +104,8 @@ option (maxrecursion 0)
 
 
 
+
+
 -- // Jahid code
 WITH tree(id, parent_id, accno,name,groupby, debit,credit) AS
 (
@@ -270,3 +272,19 @@ select * from accjaopenbalances where credit > 0;
 select accjournalaccount_id, sum(debit) as tbebit, sum(credit) as tcredit
 from accjourpostdetails where warehouse_id = 2
 group by accjournalaccount_id;
+
+
+
+
+-- Required
+update accjaopenbalances set opnbcredit = 0 where accstatus = 1;
+update accjaopenbalances set opnbdebit = 0 where accstatus = 2;
+update accjaopenbalances set opnbcredit = 0 where accstatus = 3;
+update accjaopenbalances set opnbdebit = 0 where accstatus = 4;
+
+update accjaopenbalances set opnbdebit = 0, opnbcredit = 0,
+debit = 0, credit = 0,clbdebit = 0, clbcredit = 0;
+
+select * from accjaopenbalances where accaccjournalaccount_id = 58;
+
+select * from accjaopenbalances where whereto = 1 and warehouse_id =2;

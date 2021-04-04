@@ -79,6 +79,9 @@ CREATE TABLE sales (
     updated_at DATETIME DEFAULT NULL,
 )
 
+
+
+
 CREATE TABLE saledetails (
     id BIGINT IDENTITY(1,1) PRIMARY KEY,
     sale_id BIGINT NOT NULL,
