@@ -230,3 +230,29 @@ string query5 = @"insert into ispclients (branch_id,ispnetwork_id,ispzone_id,isp
                         cmd1.Parameters.AddWithValue("@service", service);
                         cmd1.ExecuteNonQuery();
                         BaseClass.Con.Close();
+
+
+
+
+//Update With Store Prcedure======
+string query3 = @"TB_Stap_1";
+SqlCommand cmd3 = BaseClass.CommandBuilder(query3);
+cmd3.CommandType = System.Data.CommandType.StoredProcedure;
+cmd3.Parameters.AddWithValue("@wid", warehouse_id);
+cmd3.ExecuteNonQuery();
+BaseClass.Con.Close();
+//Update With Store Prcedure======
+
+// Select With Store Prcedure ======
+string CS = ConfigurationManager.ConnectionStrings["CSDB"].ConnectionString;
+SqlConnection con = new SqlConnection(CS);
+con.Open();
+string query = "TB_Stap_2";
+SqlCommand cmd = new SqlCommand(query, con);
+cmd.Parameters.AddWithValue("@wid", warehouse_id);
+cmd.CommandType = CommandType.StoredProcedure;
+SqlDataReader rdr = cmd.ExecuteReader();
+GridView1.DataSource = rdr;
+GridView1.DataBind();
+con.Close();
+//Select With Store Prcedure======

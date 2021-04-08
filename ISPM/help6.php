@@ -282,9 +282,44 @@ update accjaopenbalances set opnbdebit = 0 where accstatus = 2;
 update accjaopenbalances set opnbcredit = 0 where accstatus = 3;
 update accjaopenbalances set opnbdebit = 0 where accstatus = 4;
 
-update accjaopenbalances set opnbdebit = 0, opnbcredit = 0,
+
+
+
+update accjaopenbalances set uopnbdebit = 0, uopnbcredit = 0,
 debit = 0, credit = 0,clbdebit = 0, clbcredit = 0;
 
 select * from accjaopenbalances where accaccjournalaccount_id = 58;
 
 select * from accjaopenbalances where whereto = 1 and warehouse_id =2;
+
+select opnbdebit, opnbcredit, debit, credit, clbdebit, clbcredit, uopnbdebit, uopnbcredit 
+from accjaopenbalances where warehouse_id = 2;
+
+
+Exec TB_Stap_1_1 @wid = 2, @fdate = '2021-01-03', @tdate = '2021-03-31';
+
+Exec TB_Stap_1 @wid = 2, @fdate = '2021-04-01', @tdate = '2021-04-20';
+
+
+
+Exec TB_Stap_1_1 @wid = 2, @fdate = '2021-01-01', @tdate = '2021-03-29';
+
+Exec TB_Stap_1 @wid = 2, @fdate = '2021-03-30', @tdate = '2021-04-20';
+
+
+
+select opnbdebit, opnbcredit, debit, credit, clbdebit, clbcredit, uopnbdebit, uopnbcredit 
+from accjaopenbalances where warehouse_id = 2;
+Exec TB_Stap_1 @wid = 2, @fdate = '2021-01-01', @tdate = '2021-03-29';
+
+
+update accjaopenbalances set uopnbdebit = 0, uopnbcredit = 0,
+debit = 0, credit = 0,clbdebit = 0, clbcredit = 0;
+
+select * from accjaopenbalances where warehouse_id = 2;
+
+
+select sum(opnbdebit) as opnbdebit, sum(opnbcredit) as opnbcredit from accjaopenbalances where accstatus = 1 and warehouse_id = 2;
+select sum(opnbdebit) as opnbdebit, sum(opnbcredit) as opnbcredit from accjaopenbalances where accstatus = 2 and warehouse_id = 2;
+select sum(opnbdebit) as opnbdebit, sum(opnbcredit) as opnbcredit from accjaopenbalances where accstatus = 3 and warehouse_id = 2;
+select sum(opnbdebit) as opnbdebit, sum(opnbcredit) as opnbcredit from accjaopenbalances where accstatus = 4 and warehouse_id = 2;

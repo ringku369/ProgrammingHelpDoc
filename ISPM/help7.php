@@ -111,6 +111,11 @@ order by t3.accstatus,t3.parent_id asc option (maxrecursion 0)
 
 
 
+Exec TB_Stap_1 @wid = 2;
+Exec TB_Stap_2 @wid = 2;
+
+
+
 
 
 

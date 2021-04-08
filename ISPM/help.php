@@ -194,17 +194,24 @@ select * from  userwhmaps;
 select * from accjournalaccounts;
 select * from accjaopenbalances;
 
+select * from accjourpostdetails;
 
 
 
 
 
+ReportStockF1
 
+ReportTrailBalace
 
 SaleToAccounts
 
 UserWarehouseMap
 AccChartofAccWHMap
+
+
+
+
 
 
 
@@ -277,3 +284,37 @@ select top 1 * from cash_voucher_det where tx_no=7102;
 
 
 select top 1 * from cash_voucher_det where tx_no=7102;
+
+
+
+// for action permission code
+if (this._ulevel != 100000)
+{
+    //==================
+    string _path = HttpContext.Current.Request.Url.AbsolutePath;
+    int _isEditPer = actionPermission.IsEditPermission(this._id, _path);
+
+    if (_isEditPer == 0)
+    {
+        error_area.Visible = true;
+        success_area.Visible = false;
+        error_msg.Text = "Sorry you are not eligible for this action";
+        return;
+    }
+
+
+}
+// for action permission code
+
+if (this._ulevel == 100000)
+{
+    if (DropDownList10.SelectedValue == "0")
+    {
+        error_area.Visible = true;
+        success_area.Visible = false;
+        error_msg.Text = "Please select branch before";
+        return;
+    }
+
+    this._branch_id = Convert.ToInt32(DropDownList10.SelectedValue);
+}
