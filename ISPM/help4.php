@@ -67,7 +67,7 @@ CREATE TABLE [dbo].[accjaopenbalances](
 
 
 
-int accaccjournalaccount_id = Convert.ToInt32(rdr["id"].ToString());
+int accjournalaccount_id = Convert.ToInt32(rdr["id"].ToString());
 int branch_id = Convert.ToInt32(rdr["branch_id"].ToString());
 
 int parent_id = Convert.ToInt32(rdr["parent_id"].ToString());

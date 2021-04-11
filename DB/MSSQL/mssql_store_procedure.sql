@@ -33,14 +33,14 @@ with cte1 as (
 update accjaopenbalances set debit = t2.tbebit, credit = t2.tcredit
 from accjaopenbalances join (
   select * from cte1
-) as t2 on t2.accjournalaccount_id = accjaopenbalances.accaccjournalaccount_id where accjaopenbalances.warehouse_id = @whid 
+) as t2 on t2.accjournalaccount_id = accjaopenbalances.accjournalaccount_id where accjaopenbalances.warehouse_id = @whid 
 
 -- end code	
 
 -- start code
 update accjaopenbalances set clbdebit = 0, clbcredit = 0 where warehouse_id = @whid;
 with cte2 as (
-  select t3.id as id, t3.accaccjournalaccount_id as aid, 
+  select t3.id as id, t3.accjournalaccount_id as aid, 
   t3.opnbdebit, t3.opnbcredit,
   t3.debit, t3.credit,
   t3.clbdebit, t3.clbcredit

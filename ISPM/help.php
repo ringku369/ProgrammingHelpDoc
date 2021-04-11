@@ -209,6 +209,8 @@ SaleToAccounts
 UserWarehouseMap
 AccChartofAccWHMap
 
+ReportStockWithOpnBln
+
 
 
 

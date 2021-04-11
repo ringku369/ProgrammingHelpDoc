@@ -65,14 +65,14 @@ option (maxrecursion 0)
 //with CTE
 with cte as  
 (  
-  select t1.accaccjournalaccount_id as aid,  
+  select t1.accjournalaccount_id as aid,  
          t1.opnbdebit,  
          t1.opnbcredit,  
-         t1.accaccjournalaccount_id as root_id,  
+         t1.accjournalaccount_id as root_id,  
 		 t1.warehouse_id as warehouse_id
   from accjaopenbalances t1 where t1.warehouse_id = 2 
   union all  
-  select t2.accaccjournalaccount_id as aid,  
+  select t2.accjournalaccount_id as aid,  
          t2.opnbdebit,  
          t2.opnbcredit, 
          cte.root_id,
@@ -84,7 +84,7 @@ with cte as
 
   
 select 
-		t3.accaccjournalaccount_id as aid,  
+		t3.accjournalaccount_id as aid,  
 		t3.opnbdebit,  
 		t3.opnbcredit,  
 		t3.name,   
@@ -98,8 +98,8 @@ from accjaopenbalances t3
              from cte  
              group by root_id  
              ) as t4  
-    on t3.accaccjournalaccount_id = t4.root_id  
-order by t3.accaccjournalaccount_id  
+    on t3.accjournalaccount_id = t4.root_id  
+order by t3.accjournalaccount_id  
 option (maxrecursion 0) 
 
 
@@ -130,23 +130,23 @@ order by t.accno
 
 with cte as  
 (  
-  select t1.accaccjournalaccount_id as aid,t1.opnbdebit,t1.opnbcredit,t1.accaccjournalaccount_id as root_id
+  select t1.accjournalaccount_id as aid,t1.opnbdebit,t1.opnbcredit,t1.accjournalaccount_id as root_id
   from accjaopenbalances t1 where t1.warehouse_id = 2 
   union all  
-  select t2.accaccjournalaccount_id as aid,t2.opnbdebit,t2.opnbcredit,cte.root_id
+  select t2.accjournalaccount_id as aid,t2.opnbdebit,t2.opnbcredit,cte.root_id
   from accjaopenbalances t2
     inner join cte on t2.parent_id = cte.aid where t2.warehouse_id = 2 
 )
 
 --select * from cte;
-select t3.id as id,t3.accaccjournalaccount_id as aid,t3.opnbdebit,t3.opnbcredit,t3.name,t4.opnbdebitwithChild,t4.opnbcreditwithChild
+select t3.id as id,t3.accjournalaccount_id as aid,t3.opnbdebit,t3.opnbcredit,t3.name,t4.opnbdebitwithChild,t4.opnbcreditwithChild
 from accjaopenbalances t3
   inner join ( 
   select root_id, sum(opnbdebit) as opnbdebitwithChild, 
   sum(opnbcredit) as opnbcreditwithChild 
   from cte group by cte.root_id ) as t4  
-    on t3.accaccjournalaccount_id = t4.root_id  where t3.warehouse_id = 2 
-order by t3.accaccjournalaccount_id  
+    on t3.accjournalaccount_id = t4.root_id  where t3.warehouse_id = 2 
+order by t3.accjournalaccount_id  
 option (maxrecursion 0) 
 
 
@@ -155,28 +155,28 @@ option (maxrecursion 0)
 
 with cte as  
 (  
-  select t1.accaccjournalaccount_id as aid,t1.opnbdebit,t1.opnbcredit,t1.accaccjournalaccount_id as root_id
+  select t1.accjournalaccount_id as aid,t1.opnbdebit,t1.opnbcredit,t1.accjournalaccount_id as root_id
   from accjaopenbalances t1 
   
 
   where t1.warehouse_id = 2 
   union all  
-  select t2.accaccjournalaccount_id as aid,t2.opnbdebit,t2.opnbcredit,
+  select t2.accjournalaccount_id as aid,t2.opnbdebit,t2.opnbcredit,
   cte.root_id
   from accjaopenbalances t2
     inner join cte on t2.parent_id = cte.aid where t2.warehouse_id = 2 
 )
 --select * from cte;
-select t3.id as id, t3.accaccjournalaccount_id as aid, t3.opnbdebit, t3.opnbcredit,
+select t3.id as id, t3.accjournalaccount_id as aid, t3.opnbdebit, t3.opnbcredit,
 t5.name,t4.opnbdebitwithChild,t4.opnbcreditwithChild
 from accjaopenbalances t3 
-  join accjournalaccounts t5 on t5.id = t3.accaccjournalaccount_id
+  join accjournalaccounts t5 on t5.id = t3.accjournalaccount_id
   inner join ( 
   select root_id, sum(opnbdebit) as opnbdebitwithChild, 
   sum(opnbcredit) as opnbcreditwithChild 
   from cte group by cte.root_id ) as t4  
-    on t3.accaccjournalaccount_id = t4.root_id  where t3.warehouse_id = 2 
-order by t3.accaccjournalaccount_id  
+    on t3.accjournalaccount_id = t4.root_id  where t3.warehouse_id = 2 
+order by t3.accjournalaccount_id  
 option (maxrecursion 0)
 
 
@@ -184,30 +184,30 @@ option (maxrecursion 0)
 
 with cte as  
 (  
-  select t1.accaccjournalaccount_id as aid,t1.debit,t1.credit,t1.accaccjournalaccount_id as root_id
+  select t1.accjournalaccount_id as aid,t1.debit,t1.credit,t1.accjournalaccount_id as root_id
   from accjaopenbalances t1 
   
 
   where t1.warehouse_id = 2 
   union all  
-  select t2.accaccjournalaccount_id as aid,t2.debit,t2.credit,
+  select t2.accjournalaccount_id as aid,t2.debit,t2.credit,
   cte.root_id
   from accjaopenbalances t2
     inner join cte on t2.parent_id = cte.aid where t2.warehouse_id = 2 
 )
 --select * from cte;
-select t3.id as id, t3.accaccjournalaccount_id as aid, t3.debit, t3.credit,
+select t3.id as id, t3.accjournalaccount_id as aid, t3.debit, t3.credit,
 t3.opnbdebit, t3.opnbcredit,
 
 t5.name,t4.debitwithChild,t4.debitwithChild
 from accjaopenbalances t3 
-  join accjournalaccounts t5 on t5.id = t3.accaccjournalaccount_id
+  join accjournalaccounts t5 on t5.id = t3.accjournalaccount_id
   inner join ( 
   select root_id, sum(debit) as debitwithChild, 
   sum(credit) as creditwithChild 
   from cte group by cte.root_id ) as t4  
-    on t3.accaccjournalaccount_id = t4.root_id  where t3.warehouse_id = 2 
-order by t3.accaccjournalaccount_id  
+    on t3.accjournalaccount_id = t4.root_id  where t3.warehouse_id = 2 
+order by t3.accjournalaccount_id  
 option (maxrecursion 0)
 
 
@@ -218,29 +218,29 @@ declare @whid int = 2;
 -- set @whid = 2;
 with cte as  
 (  
-  select t1.accaccjournalaccount_id as aid,t1.debit,t1.credit,t1.accaccjournalaccount_id as root_id
+  select t1.accjournalaccount_id as aid,t1.debit,t1.credit,t1.accjournalaccount_id as root_id
   from accjaopenbalances t1 
   
   where t1.warehouse_id = @whid 
   union all  
-  select t2.accaccjournalaccount_id as aid,t2.debit,t2.credit,
+  select t2.accjournalaccount_id as aid,t2.debit,t2.credit,
   cte.root_id
   from accjaopenbalances t2
     inner join cte on t2.parent_id = cte.aid where t2.warehouse_id = @whid 
 )
 --select * from cte;
-select t3.id as id, t3.accaccjournalaccount_id as aid, t3.debit, t3.credit,
+select t3.id as id, t3.accjournalaccount_id as aid, t3.debit, t3.credit,
 t3.opnbdebit, t3.opnbcredit,
 
 t5.name,t4.tdebit,t4.tcredit,
 from accjaopenbalances t3 
-  join accjournalaccounts t5 on t5.id = t3.accaccjournalaccount_id
+  join accjournalaccounts t5 on t5.id = t3.accjournalaccount_id
   inner join ( 
   select root_id, sum(debit) as tdebit, 
   sum(credit) as tcredit 
   from cte group by cte.root_id ) as t4  
-    on t3.accaccjournalaccount_id = t4.root_id  where t3.warehouse_id = @whid 
-order by t3.accaccjournalaccount_id  
+    on t3.accjournalaccount_id = t4.root_id  where t3.warehouse_id = @whid 
+order by t3.accjournalaccount_id  
 option (maxrecursion 0)
 
 
@@ -261,7 +261,7 @@ update accjaopenbalances set debit = t2.tbebit, credit = t2.tcredit
 
 from accjaopenbalances join (
   select * from cte
-) as t2 on t2.accjournalaccount_id = accjaopenbalances.accaccjournalaccount_id where accjaopenbalances.warehouse_id = @whid 
+) as t2 on t2.accjournalaccount_id = accjaopenbalances.accjournalaccount_id where accjaopenbalances.warehouse_id = @whid 
 
 
 -- All checking code
@@ -288,7 +288,7 @@ update accjaopenbalances set opnbdebit = 0 where accstatus = 4;
 update accjaopenbalances set uopnbdebit = 0, uopnbcredit = 0,
 debit = 0, credit = 0,clbdebit = 0, clbcredit = 0;
 
-select * from accjaopenbalances where accaccjournalaccount_id = 58;
+select * from accjaopenbalances where accjournalaccount_id = 58;
 
 select * from accjaopenbalances where whereto = 1 and warehouse_id =2;
 
@@ -323,3 +323,12 @@ select sum(opnbdebit) as opnbdebit, sum(opnbcredit) as opnbcredit from accjaopen
 select sum(opnbdebit) as opnbdebit, sum(opnbcredit) as opnbcredit from accjaopenbalances where accstatus = 2 and warehouse_id = 2;
 select sum(opnbdebit) as opnbdebit, sum(opnbcredit) as opnbcredit from accjaopenbalances where accstatus = 3 and warehouse_id = 2;
 select sum(opnbdebit) as opnbdebit, sum(opnbcredit) as opnbcredit from accjaopenbalances where accstatus = 4 and warehouse_id = 2;
+
+
+
+select 
+sum(opnbdebit) as topnbdebit, sum(opnbcredit) as topnbcredit,
+sum(uopnbdebit) as tuopnbdebit, sum(uopnbcredit) as tuopnbcredit,
+sum(debit) as tdebit, sum(credit) as tcredit,
+sum(clbcredit) as tclbcredit, sum(clbcredit) as tclbcredit
+from accjaopenbalances where warehouse_id = 2;
