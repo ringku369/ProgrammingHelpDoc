@@ -90,6 +90,35 @@ select  (
 
 # total stock query with branch
 # 
+# total stock query with branch
+# 
+
+declare @brid int = 9;
+with cte1 as (
+select t1.id as product_id, (
+	(case when sum(t2.quantity) is null then 0 else sum(t2.quantity) end) - 
+	(select (case when sum(t3.quantity) is null then 0 else sum(t3.quantity) end) from  saledetails as t3 where t1.id = t3.product_id and t3.branch_id = @brid )
+	) as stock, 
+
+	(
+	--kk
+	(
+	(case when sum(t2.quantity) is null then 0 else sum(t2.quantity) end) - 
+	(select (case when sum(t3.quantity) is null then 0 else sum(t3.quantity) end) from  saledetails as t3 where t1.id = t3.product_id and t3.branch_id = @brid )
+	) * (select (case when avg(t3.price) is null then 0 else avg(t3.price) end) from proavamounts as t3 where t3.product_id = t1.id and t3.branch_id = @brid)
+	--kk
+	) as stkam
+
+	from products as t1 
+	left join purchasedetails as t2 on t1.id = t2.product_id
+	where t2.branch_id = @brid
+	group by t1.id
+)
+
+select sum(stkam) as tstock from cte1;
+
+# total stock query with branch
+# 
 # 
 # total stock query with warehouse
 # 
@@ -100,6 +129,35 @@ select  (
     ) as stock
     from products as t1 
     left join purchasedetails as t2 on t1.id = t2.product_id where t2.warehouse_id = @whid;
+
+# total stock query with warehouse
+# 
+# 
+# total stock query with warehouse
+# 
+declare @whid int = 2;
+with cte1 as (
+select t1.id as product_id, (
+  (case when sum(t2.quantity) is null then 0 else sum(t2.quantity) end) - 
+  (select (case when sum(t3.quantity) is null then 0 else sum(t3.quantity) end) from  saledetails as t3 where t1.id = t3.product_id and t3.warehouse_id = @whid )
+  ) as stock, 
+
+  (
+  --kk
+  (
+  (case when sum(t2.quantity) is null then 0 else sum(t2.quantity) end) - 
+  (select (case when sum(t3.quantity) is null then 0 else sum(t3.quantity) end) from  saledetails as t3 where t1.id = t3.product_id and t3.warehouse_id = @whid )
+  ) * (select (case when avg(t3.price) is null then 0 else avg(t3.price) end) from proavamounts as t3 where t3.product_id = t1.id and t3.warehouse_id = @whid)
+  --kk
+  ) as stkam
+
+  from products as t1 
+  left join purchasedetails as t2 on t1.id = t2.product_id
+  where t2.warehouse_id = @whid
+  group by t1.id
+)
+
+select sum(stkam) as tstock from cte1;
 
 # total stock query with warehouse
 # 
