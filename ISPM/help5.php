@@ -49,6 +49,70 @@ from products as t1 left join (
 # 
 # 
 
+# stock query with branch
+# 
+
+declare @brid int = 9;
+declare @fdatev datetime = '2021-03-03';
+declare @tdatev datetime = '2021-04-12';
+
+with cte1 as (
+	select t1.id as product_id, (
+	(case when sum(t2.quantity) is null then 0 else sum(t2.quantity) end) - 
+	(select (case when sum(t3.quantity) is null then 0 else sum(t3.quantity) end) from  saledetails as t3 where t1.id = t3.product_id and t3.branch_id = @brid and convert(varchar(10),t3.vchdate, 121)  between  @fdatev and @tdatev )
+	) as stock
+	from products as t1 
+	left join purchasedetails as t2 on t1.id = t2.product_id where t2.branch_id = @brid and convert(varchar(10),t2.vchdate, 121)  between  @fdatev and @tdatev
+	group by t1.id
+)
+--select * from cte1;
+select t1.id as id, t1.name_en, t1.productcode as code, t4.name_en as unittype, t4.code as unitcode, (case when t2.stock is null then 0 else t2.stock end) as stockqty, 
+(select (case when avg(t3.price) is null then 0 else avg(t3.price) end) from proavamounts as t3 where t3.product_id = t1.id and t3.branch_id = @brid) as avgprice,
+
+((case when t2.stock is null then 0 else t2.stock end) * (select (case when avg(t3.price) is null then 0 else avg(t3.price) end) from proavamounts as t3 where t3.product_id = t1.id and t3.branch_id = @brid) ) as stockamount
+
+
+from products as t1 left join (
+	select * from cte1
+) as t2 on t2.product_id = t1.id join productunittypes as t4 on t4.id = t1.productunittype_id;
+
+
+
+# 
+# stock query with branch
+# 
+# 
+
+# stock query with warehouse
+# 
+
+declare @whid int = 4;
+declare @fdatev datetime = '2021-03-03';
+declare @tdatev datetime = '2021-04-12';
+with cte1 as (
+    select t1.id as product_id, (
+    (case when sum(t2.quantity) is null then 0 else sum(t2.quantity) end) - 
+    (select (case when sum(t3.quantity) is null then 0 else sum(t3.quantity) end) from  saledetails as t3 where t1.id = t3.product_id and t3.warehouse_id = @whid and convert(varchar(10),t3.vchdate, 121)  between  @fdatev and @tdatev )
+    ) as stock
+    from products as t1 
+    left join purchasedetails as t2 on t1.id = t2.product_id where t2.warehouse_id = @whid and convert(varchar(10),t2.vchdate, 121)  between  @fdatev and @tdatev
+    group by t1.id
+)
+--select * from cte1;
+select t1.id as id, t1.name_en, t1.productcode as code, t4.name_en as unittype, t4.code as unitcode, (case when t2.stock is null then 0 else t2.stock end) as stockqty, 
+(select (case when avg(t3.price) is null then 0 else avg(t3.price) end) from proavamounts as t3 where t3.product_id = t1.id and t3.warehouse_id = @whid) as avgprice,
+
+((case when t2.stock is null then 0 else t2.stock end) * (select (case when avg(t3.price) is null then 0 else avg(t3.price) end) from proavamounts as t3 where t3.product_id = t1.id and t3.warehouse_id = @whid) ) as stockamount
+
+
+from products as t1 left join (
+    select * from cte1
+) as t2 on t2.product_id = t1.id join productunittypes as t4 on t4.id = t1.productunittype_id;
+
+# 
+# stock query with warehouse
+# 
+# 
 # stock query with warehouse
 # 
 
@@ -94,24 +158,26 @@ select  (
 # 
 
 declare @brid int = 9;
+declare @fdatev datetime = '2021-03-03';
+declare @tdatev datetime = '2021-04-12';
 with cte1 as (
 select t1.id as product_id, (
 	(case when sum(t2.quantity) is null then 0 else sum(t2.quantity) end) - 
-	(select (case when sum(t3.quantity) is null then 0 else sum(t3.quantity) end) from  saledetails as t3 where t1.id = t3.product_id and t3.branch_id = @brid )
+	(select (case when sum(t3.quantity) is null then 0 else sum(t3.quantity) end) from  saledetails as t3 where t1.id = t3.product_id and t3.branch_id = @brid and convert(varchar(10),t3.vchdate, 121)  between  @fdatev and @tdatev)
 	) as stock, 
 
 	(
 	--kk
 	(
 	(case when sum(t2.quantity) is null then 0 else sum(t2.quantity) end) - 
-	(select (case when sum(t3.quantity) is null then 0 else sum(t3.quantity) end) from  saledetails as t3 where t1.id = t3.product_id and t3.branch_id = @brid )
+	(select (case when sum(t3.quantity) is null then 0 else sum(t3.quantity) end) from  saledetails as t3 where t1.id = t3.product_id and t3.branch_id = @brid and convert(varchar(10),t3.vchdate, 121)  between  @fdatev and @tdatev)
 	) * (select (case when avg(t3.price) is null then 0 else avg(t3.price) end) from proavamounts as t3 where t3.product_id = t1.id and t3.branch_id = @brid)
 	--kk
 	) as stkam
 
 	from products as t1 
 	left join purchasedetails as t2 on t1.id = t2.product_id
-	where t2.branch_id = @brid
+	where t2.branch_id = @brid and convert(varchar(10),t2.vchdate, 121)  between  @fdatev and @tdatev
 	group by t1.id
 )
 
@@ -136,24 +202,26 @@ select  (
 # total stock query with warehouse
 # 
 declare @whid int = 2;
+declare @fdatev datetime = '2021-03-03';
+declare @tdatev datetime = '2021-04-12';
 with cte1 as (
 select t1.id as product_id, (
   (case when sum(t2.quantity) is null then 0 else sum(t2.quantity) end) - 
-  (select (case when sum(t3.quantity) is null then 0 else sum(t3.quantity) end) from  saledetails as t3 where t1.id = t3.product_id and t3.warehouse_id = @whid )
+  (select (case when sum(t3.quantity) is null then 0 else sum(t3.quantity) end) from  saledetails as t3 where t1.id = t3.product_id and t3.warehouse_id = @whid and convert(varchar(10),t3.vchdate, 121)  between  @fdatev and @tdatev)
   ) as stock, 
 
   (
   --kk
   (
   (case when sum(t2.quantity) is null then 0 else sum(t2.quantity) end) - 
-  (select (case when sum(t3.quantity) is null then 0 else sum(t3.quantity) end) from  saledetails as t3 where t1.id = t3.product_id and t3.warehouse_id = @whid )
+  (select (case when sum(t3.quantity) is null then 0 else sum(t3.quantity) end) from  saledetails as t3 where t1.id = t3.product_id and t3.warehouse_id = @whid and convert(varchar(10),t3.vchdate, 121)  between  @fdatev and @tdatev)
   ) * (select (case when avg(t3.price) is null then 0 else avg(t3.price) end) from proavamounts as t3 where t3.product_id = t1.id and t3.warehouse_id = @whid)
   --kk
   ) as stkam
 
   from products as t1 
   left join purchasedetails as t2 on t1.id = t2.product_id
-  where t2.warehouse_id = @whid
+  where t2.warehouse_id = @whid and convert(varchar(10),t2.vchdate, 121)  between  @fdatev and @tdatev
   group by t1.id
 )
 
