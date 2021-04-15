@@ -498,7 +498,30 @@ END
 
 
 
+-- DWS_WB -2
 
+CREATE OR ALTER PROCEDURE DWS_WB @bid int, @fdate datetime ,@tdate datetime
+AS BEGIN
+
+declare @brid int = @bid;
+
+declare @fdatev datetime = @fdate;
+declare @tdatev datetime = @tdate;
+
+--declare @fdatev datetime = '2021-04-13';
+--declare @tdatev datetime = '2021-04-13';
+
+
+
+
+
+END
+
+--Exec DWS_WB @bid = 9, @fdate = '2021-01-01', @tdate = '2021-04-15';
+
+--DROP PROCEDURE DWS_WB
+
+-- DWS_WB -2
 
 
 

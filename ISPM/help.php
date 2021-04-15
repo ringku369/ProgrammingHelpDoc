@@ -182,6 +182,8 @@ select * from  purchases;
 select * from  purchasedetails;
 
 select * from  sales;
+
+select * from  purchasedetails;
 select * from  saledetails;
 
 select * from accjourposts;
