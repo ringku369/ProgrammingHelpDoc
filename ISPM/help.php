@@ -206,6 +206,8 @@ ReportStockF1
 
 ReportTrailBalace
 
+ReportProfitLoss
+
 SaleToAccounts
 
 UserWarehouseMap
