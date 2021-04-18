@@ -1,5 +1,103 @@
 <?php
 
+
+
+//
+//Tree Example - 1
+//
+declare @brid int = 9;
+declare @id int = 19;
+
+
+with cte as  
+(  
+  select t1.id as aid,t1.name as ledger, t1.parent_id as parentid
+  from accjournalaccounts t1 where t1.id = @id and t1.branch_id = @brid
+  union all  
+  select t2.id as aid,t2.name as ledger,t2.parent_id as parentid
+  from accjournalaccounts t2
+    join cte on t2.parent_id = cte.aid and t2.branch_id = @brid
+)
+
+--select * from cte;
+
+select t1.aid, t1.ledger, ISNULL( t2.ledger, 'Boss' ) as parent, t1.parentid
+from cte as t1 left join cte as t2 on t1.parentid = t2.aid
+
+
+//
+//Tree Example - 1
+//
+
+
+
+//
+//Tree Example -2
+//
+declare @brid int = 4;
+declare @id int = 19;
+
+
+with cte as  
+(  
+  select t1.accjournalaccount_id as aid,t1.name as ledger, t1.parent_id as parentid
+  from accjaopenbalances t1 where t1.accjournalaccount_id = @id and t1.warehouse_id = @brid
+  union all  
+  select t2.accjournalaccount_id as aid,t2.name as ledger,t2.parent_id as parentid
+  from accjaopenbalances t2
+    join cte on t2.parent_id = cte.aid and t2.warehouse_id = @brid
+)
+
+--select * from cte;
+
+select t1.aid, t1.ledger, ISNULL( t2.ledger, 'Boss' ) as parent, t1.parentid
+from cte as t1 left join cte as t2 on t1.parentid = t2.aid
+
+
+//
+//Tree Example -2
+//
+
+
+//
+//Tree Example -3
+//
+
+declare @brid int = 9;
+--declare @id int = 19;
+
+with cteca0 as(
+  select t1.id as id from accjournalaccounts as t1 where t1.branch_id = @brid and t1.name = 'Fixed Asset'
+),
+
+cteca1 as  
+(  
+  select t1.id as aid,t1.name as ledger, t1.parent_id as parentid, t1.clbdebit as clbdebit
+  from accjournalaccounts t1 where t1.id = (select id from cteca0) and t1.branch_id = @brid
+  union all  
+  select t2.id as aid,t2.name as ledger,t2.parent_id as parentid, t2.clbdebit as clbdebit
+  from accjournalaccounts t2
+    join cteca1 on t2.parent_id = cteca1.aid and t2.branch_id = @brid
+)
+
+--select sum(clbdebit) as tdebit from cteca1;
+
+select t1.aid, t1.ledger, ISNULL( t2.ledger, 'Boss' ) as parent, t1.clbdebit
+from cteca1 as t1 left join cteca1 as t2 on t1.parentid = t2.aid
+
+
+//
+//Tree Example -3
+//
+
+
+
+
+
+
+
+
+
 CREATE TABLE ProductCategories(  
     Id int IDENTITY(1,1) NOT NULL,  
     Amount float NOT NULL,  
@@ -332,3 +430,31 @@ sum(uopnbdebit) as tuopnbdebit, sum(uopnbcredit) as tuopnbcredit,
 sum(debit) as tdebit, sum(credit) as tcredit,
 sum(clbcredit) as tclbcredit, sum(clbcredit) as tclbcredit
 from accjaopenbalances where warehouse_id = 2;
+
+
+
+select sum(t1.clbdebit) as debit, sum(t1.clbcredit) as credit 
+from accjournalaccounts as t1 where t1.accstatus = 2;
+
+select sum(t1.clbdebit) as debit, sum(t1.clbcredit) as credit 
+from accjournalaccounts as t1 where t1.accstatus = 1;
+
+select opnbdebit, opnbcredit, debit, credit, clbdebit, clbcredit, uopnbdebit, uopnbcredit 
+from accjaopenbalances;
+
+update accjaopenbalances set uopnbdebit = 0, uopnbcredit = 0, opnbdebit = 0, opnbcredit = 0,
+debit = 0, credit = 0,clbdebit = 0, clbcredit = 0;
+
+update accjournalaccounts set uopnbdebit = 0, uopnbcredit = 0, opnbdebit = 0, opnbcredit = 0,
+debit = 0, credit = 0,clbdebit = 0, clbcredit = 0;
+
+
+delete from accjourposts;
+delete from accjourpostdetails;
+
+delete from proavamounts;
+delete from purchases;
+delete from purchasedetails;
+
+delete from sales;
+delete from saledetails;

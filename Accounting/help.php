@@ -26,7 +26,7 @@ GrossLossExp = Direct Expense() + Purchase A/C + Opening Stock;
 
 GrossLossInc1 = Direct Income() + Sales A/C + Closing Stock;
 
-GrossLossC/O = GrossLossExp - GrossLossInc;
+GrossLossC/O = GrossLossExp - GrossLossInc1;
 
 GrossLossC/O = GrossLoss B/F
 
@@ -36,7 +36,9 @@ GrossLossInc = Direct Income() + Sales A/C + Closing Stock + GrossLossC/O;
 GrossLossExp() === GrossLossInc()
 
 
-Net Profit = Indirect Income - (GrossLoss B/F + Indirect Expense)
+#Net Profit = Indirect Income - (GrossLoss B/F + Indirect Expense)
+
+Net Profit = ((indincome - (grosslossbf)) - (indexpense)) as netprofit
 
 
 Total Expense = (GrossLoss B/F + Indirect Expense) + Net Profit;
