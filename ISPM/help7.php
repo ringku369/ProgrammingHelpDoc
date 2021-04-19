@@ -4,17 +4,9 @@
 # 
 # 
 
-USE [ISPM]
-GO
-/****** Object:  StoredProcedure [dbo].[PFLS_DWOCB_WWH]    Script Date: 4/16/2021 10:42:27 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 
--- PFLS_DWOCB_WWH - 1
 
-CREATE OR ALTER PROCEDURE [dbo].[PFLS_DWOCB_WWH] @wid int, @pfdate datetime, @ptdate datetime, @fdate datetime, @tdate datetime
+CREATE OR ALTER PROCEDURE [dbo].[BLS_DWOCB_WWH] @wid int, @pfdate datetime, @ptdate datetime, @fdate datetime, @tdate datetime
 AS BEGIN
 
 
@@ -74,26 +66,26 @@ from products as t1  join productunittypes as t2 on t2.id = t1.productunittype_i
 
 cte1 as (
 select sum(t1.clbcredit) as tcredit  from 
-accjaopenbalances as t1 where t1.accstatus = 3 and t1.relation = 1 and t1.warehouse_id = @whid
+accjaopenbalances as t1 where t1.accstatus = 3 and t1.relation = 1 and type !=2 and t1.warehouse_id = @whid
 
 ), 
 
 cte2 as (
 select sum(t1.clbcredit) as tcredit  from 
-accjaopenbalances as t1 where t1.accstatus = 3 and t1.relation = 0 and t1.warehouse_id = @whid
+accjaopenbalances as t1 where t1.accstatus = 3 and t1.relation = 0 and type !=2 and t1.warehouse_id = @whid
 
 ), 
 
 cte3 as (
 select sum(t1.clbdebit) as tdebit
 from accjaopenbalances as t1
-where t1.accstatus = 4 and t1.relation = 1 and t1.warehouse_id = @whid
+where t1.accstatus = 4 and t1.relation = 1 and type !=2 and t1.warehouse_id = @whid
 ), 
 
 cte4 as (
 select sum(t1.clbdebit) as tdebit
 from accjaopenbalances as t1
-where t1.accstatus = 4  and t1.relation = 0  and t1.warehouse_id = @whid
+where t1.accstatus = 4  and t1.relation = 0 and type !=2 and t1.warehouse_id = @whid
 ),
 
 cte5 as (
@@ -108,6 +100,18 @@ from accjaopenbalances as t1
 where t1.accstatus = 4 and t1.type = 2 and t1.warehouse_id = @whid
 ),
 
+cteta as (
+select sum(t1.clbdebit) as tasset
+from accjaopenbalances as t1
+where t1.accstatus = 1  and t1.warehouse_id = @whid
+),
+
+ctetl as (
+select sum(t1.clbcredit) as tliabilities
+from accjaopenbalances as t1
+where t1.accstatus = 2  and t1.warehouse_id = @whid
+),
+
 cte7 as (
 select 
 (select (case when sum(t0.stockamount) is null then 0 else sum(t0.stockamount) end) from cte0 as t0) as openingstock,
@@ -119,7 +123,9 @@ select
 (select (case when t4.tdebit is null then 0 else t4.tdebit end) from cte4 as t4) as dexpense,
 
 (select (case when t5.tcredit is null then 0 else t5.tcredit end) from cte5 as t5) as indincome,
-(select (case when t6.tdebit is null then 0 else t6.tdebit end) from cte6 as t6) as indexpense
+(select (case when t6.tdebit is null then 0 else t6.tdebit end) from cte6 as t6) as indexpense,
+(select (case when t7.tasset is null then 0 else t7.tasset end) from cteta as t7) as asset,
+(select (case when t8.tliabilities is null then 0 else t8.tliabilities end) from ctetl as t8) as liabilities
 from cte1 as t1
 ),
 
@@ -133,7 +139,7 @@ closingstock, sale, dincome,
 ((openingstock + purchase + dexpense) - (closingstock + sale + dincome)) as grosslossco,
 
 ((openingstock + purchase + dexpense) - (closingstock + sale + dincome)) as grosslossbf,
-indexpense,indincome
+indexpense,indincome,asset,liabilities
 from cte7
 
 ),
@@ -141,7 +147,7 @@ cte9 as (
 select 
 openingstock, purchase, dexpense, closingstock, sale, dincome,grosslossco,grosslossbf,indexpense,indincome,
 
-((indincome - (grosslossbf)) - (indexpense)) as netprofit
+((indincome - (grosslossbf)) - (indexpense)) as netprofit,asset,liabilities
 
 
 from cte8
@@ -152,19 +158,18 @@ indexpense,indincome,netprofit,
 
 ((grosslossbf) + (indexpense) + (netprofit) ) as totlaexpense,
 
-indincome as totalincome
+indincome as totalincome,asset,liabilities
 
 from cte9;
 
 
 END
 
---Exec PFLS_DWOCB_WWH @wid = 9, @pfdate = '2021-01-01', @ptdate = '2021-04-01', @fdate = '2021-04-02', @tdate = '2021-04-15';
+--Exec BLS_DWOCB_WWH @wid = 9, @pfdate = '2021-01-01', @ptdate = '2021-04-01', @fdate = '2021-04-02', @tdate = '2021-04-15';
 
---DROP PROCEDURE PFLS_DWOCB_WWH
+--DROP PROCEDURE BLS_DWOCB_WWH
 
 
--- PFLS_DWOCB_WWH - 1
 
 #
 # stock query with warehouse with opening balance

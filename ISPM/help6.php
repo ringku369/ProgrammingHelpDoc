@@ -91,8 +91,105 @@ from cteca1 as t1 left join cteca1 as t2 on t1.parentid = t2.aid
 //
 
 
+//
+//Tree Example -4
+//
 
 
+
+--select * from accjournalaccounts;
+-- 1 = fixed, 2 = current
+declare @brid int = 9;
+declare @id int = 23;
+
+
+with cte as  
+(  
+  select t1.id as aid,t1.name as ledger, t1.parent_id as parentid
+  from accjournalaccounts t1 where t1.id= @id and t1.branch_id = @brid
+  union all  
+  select t2.id as aid,t2.name as ledger,t2.parent_id as parentid
+  from accjournalaccounts t2
+    join cte on t2.parent_id = cte.aid and t2.branch_id = @brid
+),
+
+cte1 as  (
+  select t1.aid,ISNULL( t2.ledger, 'Boss' ) as parent, t1.ledger,  t1.parentid
+    from cte as t1 left join cte as t2 on t1.parentid = t2.aid
+)
+
+--select * from cte1;
+
+update accjournalaccounts set astype = 2 
+
+from accjournalaccounts as t1 join (
+  select * from cte1
+) as t2 on t2.aid = t1.id and t1.branch_id = @brid
+
+
+//
+//Tree Example -4
+//
+
+
+
+//
+//Tree Example -4
+//
+
+
+
+--select * from accjournalaccounts;
+-- 1 = fixed, 2 = current
+declare @whid int = 2;
+declare @id int = 24;
+
+
+with cte as  
+(  
+  select t1.accjournalaccount_id as aid,t1.name as ledger, t1.parent_id as parentid
+  from accjaopenbalances t1 where t1.accjournalaccount_id = @id and t1.warehouse_id = @whid
+  union all  
+  select t2.accjournalaccount_id as aid,t2.name as ledger,t2.parent_id as parentid
+  from accjaopenbalances t2
+    join cte on t2.parent_id = cte.aid and t2.warehouse_id = @whid
+),
+
+cte1 as  (
+  select t1.aid, t1.ledger, ISNULL( t2.ledger, 'Boss' ) as parent, t1.parentid
+    from cte as t1 left join cte as t2 on t1.parentid = t2.aid
+)
+
+--select * from cte1;
+
+update accjaopenbalances set astype = 1
+
+from accjaopenbalances as t1 join (
+  select * from cte1
+) as t2 on t2.aid = t1.accjournalaccount_id and t1.warehouse_id = @whid
+
+
+
+
+
+//
+//Tree Example -4
+//
+
+
+
+Exec BLS_DWOCB_WBR @bid = 9, @pfdate = '2021-01-01', @ptdate = '2021-04-01', @fdate = '2021-04-02', @tdate = '2021-04-15';
+
+Exec BLS_DWOCB_WWH @wid = 2, @pfdate = '2021-01-01', @ptdate = '2021-04-01', @fdate = '2021-04-02', @tdate = '2021-04-15';
+
+Exec BLS_DWOCB_WWH @wid = 4, @pfdate = '2021-01-01', @ptdate = '2021-04-01', @fdate = '2021-04-02', @tdate = '2021-04-15';
+
+
+
+ -- fixed asset
+select sum(clbdebit) clbdebit from accjournalaccounts where astype = 2 and branch_id = 9;
+ -- current asset
+select sum(clbdebit) clbdebit from accjaopenbalances where astype = 2 and warehouse_id = 4;
 
 
 
