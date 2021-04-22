@@ -59,3 +59,26 @@ END
 
 DROP TRIGGER ainstr_accjournalaccounts
 -- Example -2
+
+
+
+-- Example -3
+CREATE OR ALTER TRIGGER aunstr_sales ON sales
+AFTER UPDATE 
+
+AS BEGIN
+ SET NOCOUNT ON;
+ --if UPDATE (total)
+ if(select isreq from inserted) = 1
+  Begin
+    insert into vreturns (sale_id) values ((select top 1 id from inserted)) 
+  End
+
+END
+
+DROP TRIGGER aunstr_sales
+-- Example -3
+
+insert into vreturndetails (sale_id,saledetail_id) 
+select t1.id as sale_id, t2.id as saledetails_id
+from sales as t1 join saledetails as t2 on t2.sale_id = t1.id where t1.id = 17

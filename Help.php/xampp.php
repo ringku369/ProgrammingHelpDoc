@@ -37,3 +37,14 @@ Replace them by with a other port number (8013 for this example) :
 Listen 8013
 <VirtualHost _default_:8013>
 ServerName localhost:8013
+
+
+
+## To Update xampp php
+https://www.youtube.com/watch?v=wtgiEluCbhc
+
+## To download update xampp version
+https://sourceforge.net/projects/xampp/files/
+
+## To Download the Microsoft Drivers for PHP for SQL Server
+https://docs.microsoft.com/en-us/sql/connect/php/download-drivers-php-sql-server?view=sql-server-ver15

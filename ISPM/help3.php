@@ -472,6 +472,7 @@ CREATE TABLE sales (
     code BIGINT DEFAULT (((ident_current('sales')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
     vchno NVARCHAR(128) NULL,
 
+    sale_id BIGINT NOT NULL,
     product_id BIGINT NOT NULL,
 
     totalprice decimal(18, 2) DEFAULT 0,
