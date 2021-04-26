@@ -26,3 +26,27 @@ string todatedisp = todateValue101.ToString("dd-MMM", CultureInfo.CreateSpecific
 int daycount101 = (int)(todateValue101 - fromdateValue101).TotalDays;
 
 
+
+select t1.id as pid, t1.name_en as pname, t1.productcode as pcode, 
+t2.sno as sno, t2.wrperiod as wrperiod, CONVERT(varchar(10), t2.vchdate, 120) as vchdate,
+
+cast( getdate() as date ) as cdate, dateadd(DD, t2.wrperiod, cast(t2.vchdate as date)) as wwrpdate,
+
+datediff(day,(cast( getdate() as date )),(dateadd(DD, t2.wrperiod, cast(t2.vchdate as date)))) as wrpleft
+
+from products as t1 
+inner join saledetails as t2 on t2.product_id = t1.id 
+where t1.isitem = 1
+
+select t1.id as pid, t1.name_en as pname, t1.productcode as pcode, 
+t2.sno as sno, t2.wrperiod as wrperiod, CONVERT(varchar(10), t2.vchdate, 120) as vchdate,
+
+cast( getdate() as date ) as cdate, dateadd(DD, t2.wrperiod, cast(t2.vchdate as date)) as wwrpdate,
+
+datediff(day,(cast( getdate() as date )),(dateadd(DD, t2.wrperiod, cast(t2.vchdate as date)))) as wrpleft
+
+from products as t1 
+inner join saledetails as t2 on t2.product_id = t1.id 
+where t1.isitem = 1 and t1.id = 1 and t2.sno = 101
+
+

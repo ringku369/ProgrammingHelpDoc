@@ -22,6 +22,14 @@ ADD column_name datatype;
 ALTER COLUMN column_name datatype; 
 
 
+ALTER TABLE purchasedetails
+ADD sno NVARCHAR(64) NULL,
+ADD imei NVARCHAR(64) NULL,
+ADD itemcolor_id BIGINT NULL,
+ADD itemsize_id BIGINT NULL,
+
+
+
 SELECT IDENT_CURRENT('users') + 1;
 SELECT IDENT_INCR('users');
 

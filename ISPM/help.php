@@ -32,6 +32,9 @@ truncate table catfirsts;
 truncate table catseconds;
 truncate table catthirds;
 
+truncate table itemcolors;
+truncate table itemsixes;
+
 truncate table products;
 
 truncate table productsummaries;
@@ -132,6 +135,8 @@ select * from  catfirsts;
 select * from  catseconds;
 select * from  catthirds;
 
+select * table itemcolors;
+select * table itemsixes;
 select * from  products;
 
 select * from  productsummaries;
@@ -144,6 +149,9 @@ select * from  saledetails;
 
 select * from proavamounts;
 select * from  userwhmaps;
+
+
+
 
 
 
@@ -193,12 +201,30 @@ select * from  sales;
 select * from  userwhmaps;
 
 
-select * from accjournalaccounts;
-select * from accjaopenbalances;
-
+select * from proavamounts;
+select * from vendors;
+select * from customerpayments;
+select * from purchases;
+select * from purchasedetails;
+select * from sales;
+select * from saledetails;
+select * from accjourposts;
 select * from accjourpostdetails;
 
 
+
+truncate table customerpayments;
+truncate table purchases;
+truncate table sales;
+truncate table purchasedetails;
+truncate table saledetails;
+truncate table proavamounts;
+truncate table accjourposts;
+truncate table accjourpostdetails;
+
+
+update sales set status = 1;
+update saledetails set status = 1;
 
 
 
@@ -210,6 +236,13 @@ ReportProfitLoss
 
 ReportBalanceSheet
 
+ReportWarrantyCheck
+
+ReportDateWiseSale
+
+ReportDateWisePurchase
+
+
 
 SaleToAccounts
 
@@ -218,11 +251,19 @@ AccChartofAccWHMap
 
 ReportStockWithOpnBln
 
+ItemColor
+ItemSize
+
+PurchaseItem
+SaleItem
+
+
+StockCatsWise
 
 
 
-
-
+Exec DWP_WBR @bid = 9, @fdate = '2021-04-03', @tdate = '2021-04-30';
+Exec DWP_WWH @wid = 2, @fdate = '2021-04-03', @tdate = '2021-04-30';
 
 update ispclients set ispnetwork_id = null, ispzone_id = null , ispsubzone_id = null;
 update ispboxes set ispnetwork_id = null, ispzone_id = null;
