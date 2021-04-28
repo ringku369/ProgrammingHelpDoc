@@ -59,6 +59,8 @@ with cte1 as (
 --select * from cte1;
 update products set paprice = t2.price, caprice = t2.price
 from products as t1 join (select * from cte1) as t2 on t1.id = t2.pid where t1.branch_id = @brid
+
+
 --update proavamounts set price = t2.price
 --from proavamounts as t1 join (select * from cte1) as t2 on t1.product_id = t2.pid;
 
@@ -124,3 +126,60 @@ Exec TB_Stap_1 @wid = 2;
 DROP PROCEDURE TB_Stap_1
 
 -- Example -4
+
+
+
+
+-- Example -5
+
+CREATE OR ALTER PROCEDURE [dbo].[PAPRCU_WBR] @bid int, @fdate datetime, @tdate datetime
+AS BEGIN
+-- start code
+declare @brid int = @bid;
+declare @fdatev datetime = @fdate;
+declare @tdatev datetime = @tdate;
+
+
+with cte1 as (
+  select t1.product_id as pid,(sum(t1.total)/sum(t1.quantity)) as price
+  from purchasedetails as t1 where t1.branch_id = @brid and convert(varchar(10),t1.vchdate, 121)  between  @fdatev and @tdatev
+  group by t1.product_id, t1.branch_id
+)
+
+--select * from cte1;
+update products set caprice = t2.price
+from products as t1 join (select * from cte1) as t2 on t1.id = t2.pid where t1.branch_id = @brid
+
+--Exec PAPRCU_WBR @bid = 9, @fdate = '2021-04-03', @tdate = '2021-04-03';
+-- Current Avg Price Update with Branch
+-- end code
+END
+
+-- Example -5
+
+-- Example -6
+
+CREATE OR ALTER PROCEDURE [dbo].[PAPRCU_WBR] @bid int, @pfdate datetime, @ptdate datetime
+AS BEGIN
+-- start code
+declare @brid int = @bid;
+declare @pfdatev datetime = @pfdate
+declare @ptdatev datetime = @ptdate;
+
+
+with cte1 as (
+  select t1.product_id as pid,(sum(t1.total)/sum(t1.quantity)) as price
+  from purchasedetails as t1 where t1.branch_id = @brid and convert(varchar(10),t1.vchdate, 121)  between  @pfdatev and @ptdatev
+  group by t1.product_id, t1.branch_id
+)
+
+--select * from cte1;
+update products set paprice = t2.price
+from products as t1 join (select * from cte1) as t2 on t1.id = t2.pid where t1.branch_id = @brid
+
+--Exec PAPRCU_WBR @bid = 9, @pfdate = '2021-04-03', @ptdate = '2021-04-03';
+-- Previous Avg Price Update with Branch
+-- end code
+END
+
+-- Example -6
