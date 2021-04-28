@@ -79,6 +79,13 @@ END
 DROP TRIGGER aunstr_sales
 -- Example -3
 
+
+-- inserting multiple row example - 1
+insert into proavamounts (product_id,branch_id,price) 
+select t1.id as product_id, t1.branch_id as branch_id, t1.caprice
+from products as t1
+
+-- inserting multiple row example - 1
 insert into vreturndetails (sale_id,saledetail_id) 
 select t1.id as sale_id, t2.id as saledetails_id
 from sales as t1 join saledetails as t2 on t2.sale_id = t1.id where t1.id = 17
