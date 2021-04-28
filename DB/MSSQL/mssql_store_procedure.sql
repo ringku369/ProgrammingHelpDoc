@@ -183,3 +183,123 @@ from products as t1 join (select * from cte1) as t2 on t1.id = t2.pid where t1.b
 END
 
 -- Example -6
+
+proavamounts
+t1.paprice
+t1.caprice
+
+
+
+(select (case when avg(t3.price) is null then 0 else avg(t3.price) end) from proavamounts as t3 where t3.product_id = t1.id and t3.branch_id = @brid) as avgprice,
+
+
+
+CREATE OR ALTER PROCEDURE [dbo].[AVPR_1] @bid int, @fdate datetime, @tdate datetime
+AS BEGIN
+-- start code
+declare @brid int = @bid;
+declare @fdatev datetime = @fdate;
+declare @tdatev datetime = @tdate;
+
+
+with cte1 as (
+  select t1.product_id as pid,(sum(t1.total)/sum(t1.quantity)) as price
+  from purchasedetails as t1 where t1.branch_id = @brid and convert(varchar(10),t1.vchdate, 121)  between  @fdatev and @tdatev
+  group by t1.product_id, t1.branch_id
+)
+
+--select * from cte1;
+update products set caprice = t2.price
+from products as t1 join (select * from cte1) as t2 on t1.id = t2.pid where t1.branch_id = @brid
+
+--Exec AVPR_1 @bid = 9, @fdate = '2021-04-03', @tdate = '2021-04-03';
+-- Current Avg Price Update with Branch
+-- end code
+END
+
+
+
+
+
+CREATE OR ALTER PROCEDURE [dbo].[AVPR_2] @bid int, @pfdate datetime, @ptdate datetime
+AS BEGIN
+-- start code
+declare @brid int = @bid;
+declare @pfdatev datetime = @pfdate
+declare @ptdatev datetime = @ptdate;
+
+
+with cte1 as (
+  select t1.product_id as pid,(sum(t1.total)/sum(t1.quantity)) as price
+  from purchasedetails as t1 where t1.branch_id = @brid and convert(varchar(10),t1.vchdate, 121)  between  @pfdatev and @ptdatev
+  group by t1.product_id, t1.branch_id
+)
+
+--select * from cte1;
+update products set paprice = t2.price
+from products as t1 join (select * from cte1) as t2 on t1.id = t2.pid where t1.branch_id = @brid
+
+--Exec AVPR_2 @bid = 9, @pfdate = '2021-04-03', @ptdate = '2021-04-03';
+-- Previous Avg Price Update with Branch
+-- end code
+END
+
+
+
+
+
+CREATE OR ALTER PROCEDURE [dbo].[AVPR_3] @bid int, @pfdate datetime, @tdate datetime
+AS BEGIN
+-- start code
+declare @brid int = @bid;
+declare @pfdatev datetime = @pfdate
+declare @tdatev datetime = @tdate;
+
+
+with cte1 as (
+  select t1.product_id as pid,(sum(t1.total)/sum(t1.quantity)) as price
+  from purchasedetails as t1 where t1.branch_id = @brid and convert(varchar(10),t1.vchdate, 121)  between  @pfdatev and @tdatev
+  group by t1.product_id, t1.branch_id
+)
+
+--select * from cte1;
+update products set pcaprice = t2.price
+from products as t1 join (select * from cte1) as t2 on t1.id = t2.pid where t1.branch_id = @brid
+
+--Exec AVPR_3 @bid = 9, @pfdate = '2021-04-03', @tdate = '2021-04-03';
+-- Previous Avg Price Update with Branch
+-- end code
+END
+
+--Exec AVPR_1 @bid = 9, @fdate = '2021-04-03', @tdate = '2021-04-03';
+--Exec AVPR_2 @bid = 9, @pfdate = '2021-04-03', @ptdate = '2021-04-03';
+--Exec AVPR_3 @bid = 9, @pfdate = '2021-04-03', @tdate = '2021-04-03';
+
+
+CREATE OR ALTER PROCEDURE [dbo].[AVPR_4] @bid int
+AS BEGIN
+-- start code
+declare @brid int = @bid;
+--declare @pfdatev datetime = @pfdate
+--declare @ptdatev datetime = @ptdate;
+
+
+with cte1 as (
+  select t1.product_id as pid,(sum(t1.total)/sum(t1.quantity)) as price
+  from purchasedetails as t1 where t1.branch_id = @brid
+  group by t1.product_id, t1.branch_id
+)
+
+--select * from cte1;
+update products set caprice = t2.price
+from products as t1 join (select * from cte1) as t2 on t1.id = t2.pid where t1.branch_id = @brid
+
+--Exec AVPR_4 @bid = 9;
+-- Previous Avg Price Update with Branch
+-- end code
+END
+
+--Exec AVPR_1 @bid = 9, @fdate = '2021-04-03', @tdate = '2021-04-03';
+--Exec AVPR_2 @bid = 9, @pfdate = '2021-04-03', @ptdate = '2021-04-03';
+--Exec AVPR_3 @bid = 9, @pfdate = '2021-04-03', @tdate = '2021-04-03';
+--Exec AVPR_4 @bid = 9;
