@@ -35,7 +35,7 @@ CREATE OR ALTER TRIGGER ainstr_accjournalaccounts ON accjournalaccounts
 AFTER INSERT 
 
 AS BEGIN
- if(select name from inserted) = 'Fixed Asset'
+  if(select name from inserted) = 'Fixed Asset'
   Begin
     update accjournalaccounts set astype = 1 where id =  (select top 1 id from inserted)
   End

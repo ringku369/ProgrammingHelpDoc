@@ -227,6 +227,19 @@ update sales set status = 1;
 update saledetails set status = 1;
 
 
+truncate table accjournalaccounts;
+truncate table accjaopenbalances;
+truncate table accjourposts;
+truncate table accjourpostdetails;
+
+
+truncate table accrelations;
+truncate table acchcrmaps;
+
+
+
+
+
 
 ReportStockF1
 
