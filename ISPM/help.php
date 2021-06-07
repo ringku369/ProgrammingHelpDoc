@@ -238,8 +238,8 @@ truncate table acchcrmaps;
 
 
 
-
-
+accvchtype_id
+JournalVchType
 
 ReportStockF1
 
@@ -381,3 +381,58 @@ if (this._ulevel == 100000)
 
     this._branch_id = Convert.ToInt32(DropDownList10.SelectedValue);
 }
+
+
+
+
+// Ledger Report
+
+declare @brid int = 9;
+declare @lid int = 47;
+
+declare @pfdatev datetime = '2021-01-01';
+declare @ptdatev datetime = '2021-05-31';
+
+declare @fdatev datetime = '2021-06-01';
+declare @tdatev datetime = '2021-06-30';
+
+
+
+
+with cte1 as (
+select sum(t1.debit) as debit, sum(t1.credit) as credit
+from accjourpostdetails as t1
+join accjourposts as t2 on t2.id = t1.accjourpost_id
+where t2.rpmode != 0 and t1.accjournalaccount_id = @lid and t1.branch_id = @brid
+and convert(varchar(10),t1.vchdate, 121)  between  @pfdatev and @ptdatev
+group by t1.accjourpost_id
+),
+
+cte2 as (
+select  t2.code as vno, 
+convert(varchar(10),t2.vchdate,105) as vchdate, t2.narration as remarks,
+t3.name as vchtype,
+sum(t1.debit) as debit, sum(t1.credit) as credit
+from accjourpostdetails as t1
+join accjourposts as t2 on t2.id = t1.accjourpost_id
+join accvchtypes as t3 on t3.id = t1.accvchtype_id
+where t2.rpmode != 0 and t1.accjournalaccount_id = @lid and t1.branch_id = @brid
+and convert(varchar(10),t1.vchdate, 121)  between  @fdatev and @tdatev
+group by t1.accjourpost_id, t2.code, t2.vchdate, t2.narration, t3.name
+
+), 
+
+-- opening balance
+cte3 as ( 
+
+select * from accjaopenbalances as t1 where
+t1.accjournalaccount_id = @lid and t1.branch_id = @brid
+),
+
+-- opening balance
+cte4 as ( 
+select (case when sum(t1.debit) is null then 0 else sum(t1.debit) end) as debit, 
+(case when sum(t1.credit) is null then 0 else sum(t1.credit) end) as credit from cte1 as t1
+)
+
+select * from cte3

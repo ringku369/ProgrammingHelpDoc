@@ -2,6 +2,8 @@
 
 #Datetime fromate
 
+https://www.w3schools.com/sql/func_sqlserver_convert.asp
+
 https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings
 https://stackoverflow.com/questions/3025361/c-sharp-datetime-to-yyyymmddhhmmss-format
 
