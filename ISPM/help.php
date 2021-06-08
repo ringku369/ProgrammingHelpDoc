@@ -387,6 +387,9 @@ if (this._ulevel == 100000)
 
 // Ledger Report
 
+
+
+
 declare @brid int = 9;
 declare @lid int = 47;
 
@@ -394,20 +397,49 @@ declare @pfdatev datetime = '2021-01-01';
 declare @ptdatev datetime = '2021-05-31';
 
 declare @fdatev datetime = '2021-06-01';
-declare @tdatev datetime = '2021-06-30';
+declare @tdatev datetime = '2021-07-30';
 
-
-
-
+-- selected before date wise area-1
 with cte1 as (
 select sum(t1.debit) as debit, sum(t1.credit) as credit
+
 from accjourpostdetails as t1
 join accjourposts as t2 on t2.id = t1.accjourpost_id
 where t2.rpmode != 0 and t1.accjournalaccount_id = @lid and t1.branch_id = @brid
 and convert(varchar(10),t1.vchdate, 121)  between  @pfdatev and @ptdatev
-group by t1.accjourpost_id
 ),
 
+-- selected before date wise area-2
+cte3 as ( 
+select 
+(select sum(t4.opnbdebit) from accjaopenbalances as t4 where t4.accjournalaccount_id = @lid and t4.branch_id = @brid) +
+
+(case when sum(t1.debit) is null then 0 else sum(t1.debit) end) as debit, 
+
+(select sum(t5.opnbcredit) from accjaopenbalances as t5 where t5.accjournalaccount_id = @lid and t5.branch_id = @brid) + 
+(case when sum(t1.credit) is null then 0 else sum(t1.credit) end) as credit from cte1 as t1
+),
+-- opening balance
+cte5 as ( 
+    select 
+
+    (case when t1.accstatus = 1 then (select (debit - credit) from cte3)
+    
+    when t1.accstatus = 4 then (select (debit - credit) from cte3)
+
+    else 0 end) as debit,
+
+    (case when t1.accstatus = 2 then (select (credit - debit) from cte3)
+    
+    when t1.accstatus = 3 then (select (credit - debit) from cte3)
+
+    else 0 end) as credit
+    
+    from accjournalaccounts as t1 where t1.id = @lid
+),
+
+
+-- selected date wise area-1
 cte2 as (
 select  t2.code as vno, 
 convert(varchar(10),t2.vchdate,105) as vchdate, t2.narration as remarks,
@@ -420,19 +452,75 @@ where t2.rpmode != 0 and t1.accjournalaccount_id = @lid and t1.branch_id = @brid
 and convert(varchar(10),t1.vchdate, 121)  between  @fdatev and @tdatev
 group by t1.accjourpost_id, t2.code, t2.vchdate, t2.narration, t3.name
 
-), 
+),
+-- selected date wise area-2
+cte4 as (
+select sum(t1.debit) as debit, sum(t1.credit) as credit
+from accjourpostdetails as t1
+join accjourposts as t2 on t2.id = t1.accjourpost_id
+join accvchtypes as t3 on t3.id = t1.accvchtype_id
+where t2.rpmode != 0 and t1.accjournalaccount_id = @lid and t1.branch_id = @brid
+and convert(varchar(10),t1.vchdate, 121)  between  @fdatev and @tdatev
 
--- opening balance
-cte3 as ( 
-
-select * from accjaopenbalances as t1 where
-t1.accjournalaccount_id = @lid and t1.branch_id = @brid
 ),
 
--- opening balance
-cte4 as ( 
-select (case when sum(t1.debit) is null then 0 else sum(t1.debit) end) as debit, 
-(case when sum(t1.credit) is null then 0 else sum(t1.credit) end) as credit from cte1 as t1
+
+-- selected date wise total Dr Cr
+cte6 as ( 
+    select ((case when debit is null then 0 else debit end) + (select debit from cte5)) as debit, 
+    ((case when credit is null then 0 else credit end) + (select credit from cte5)) as credit
+    from cte4
+),
+
+
+-- closing balance
+cte8 as ( 
+    select 
+
+    (case when t1.accstatus = 1 then  (select (debit - credit) from cte6)
+    
+    when t1.accstatus = 4 then  (select (debit - credit) from cte6)
+
+    else 0 end) as debit,
+
+    (case when t1.accstatus = 2 then  (select (credit - debit) from cte6)
+    
+    when t1.accstatus = 3 then (select (credit - debit) from cte6)
+
+    else 0 end) as credit
+    
+    from accjournalaccounts as t1 where t1.id = @lid
+),
+
+-- final result
+cte10 as ( 
+    select FORMAT (@fdatev, 'dd-MM-yyyy') as vchdate, 'Opening Balance' as remarks, null as vchtype, null as vno, debit, credit from cte5
+
+    union all 
+
+    select vchdate, remarks, vchtype, vno, debit, credit from cte2
+
+    
+    union all 
+
+    select null as vchdate, null as remarks, null as vchtype, null as vno, (case when debit = 0 then 0 else debit end) as debit, (case when credit = 0 then 0 else credit end) as credit from cte6
+
+
+    union all 
+
+    select FORMAT (@tdatev, 'dd-MM-yyyy') as vchdate, 'Closing Balance' as remarks, null as vchtype, null as vno, (case when debit = 0 then 0 else debit end) as debit, (case when credit = 0 then 0 else credit end) as credit from cte8
+
+
 )
 
-select * from cte3
+
+--select * from cte3;
+select * from cte10;
+
+
+
+
+
+
+
+
