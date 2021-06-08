@@ -391,12 +391,12 @@ if (this._ulevel == 100000)
 
 
 declare @brid int = 9;
-declare @lid int = 47;
+declare @lid int = 43;
 
 declare @pfdatev datetime = '2021-01-01';
-declare @ptdatev datetime = '2021-05-31';
+declare @ptdatev datetime = '2021-04-30';
 
-declare @fdatev datetime = '2021-06-01';
+declare @fdatev datetime = '2021-05-01';
 declare @tdatev datetime = '2021-07-30';
 
 -- selected before date wise area-1
@@ -405,7 +405,7 @@ select sum(t1.debit) as debit, sum(t1.credit) as credit
 
 from accjourpostdetails as t1
 join accjourposts as t2 on t2.id = t1.accjourpost_id
-where t2.rpmode != 0 and t1.accjournalaccount_id = @lid and t1.branch_id = @brid
+where t2.rpmode != 0 and t1.status = 1 and t1.accjournalaccount_id = @lid and t1.branch_id = @brid
 and convert(varchar(10),t1.vchdate, 121)  between  @pfdatev and @ptdatev
 ),
 
@@ -448,7 +448,7 @@ sum(t1.debit) as debit, sum(t1.credit) as credit
 from accjourpostdetails as t1
 join accjourposts as t2 on t2.id = t1.accjourpost_id
 join accvchtypes as t3 on t3.id = t1.accvchtype_id
-where t2.rpmode != 0 and t1.accjournalaccount_id = @lid and t1.branch_id = @brid
+where t2.rpmode != 0 and t1.status = 1 and t1.accjournalaccount_id = @lid and t1.branch_id = @brid
 and convert(varchar(10),t1.vchdate, 121)  between  @fdatev and @tdatev
 group by t1.accjourpost_id, t2.code, t2.vchdate, t2.narration, t3.name
 
@@ -459,7 +459,7 @@ select sum(t1.debit) as debit, sum(t1.credit) as credit
 from accjourpostdetails as t1
 join accjourposts as t2 on t2.id = t1.accjourpost_id
 join accvchtypes as t3 on t3.id = t1.accvchtype_id
-where t2.rpmode != 0 and t1.accjournalaccount_id = @lid and t1.branch_id = @brid
+where t2.rpmode != 0 and t1.status = 1 and t1.accjournalaccount_id = @lid and t1.branch_id = @brid
 and convert(varchar(10),t1.vchdate, 121)  between  @fdatev and @tdatev
 
 ),
