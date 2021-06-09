@@ -237,6 +237,8 @@ truncate table accrelations;
 truncate table acchcrmaps;
 
 
+ReportCustomerLedger
+
 
 accvchtype_id
 JournalVchType
@@ -383,21 +385,24 @@ if (this._ulevel == 100000)
 }
 
 
-
+ReportStockWithOpnBln
+ReportLedger
 
 // Ledger Report
 
+Exec LDG_WBR @bid = 9, @pfdate = '2021-01-01', @ptdate = '2021-05-31', @fdate = '2021-06-01', @tdate = '2021-07-02', @lid_id = 47;
 
-
+Exec LDG_WWH @wid = 2, @pfdate = '2021-01-01', @ptdate = '2021-04-30', @fdate = '2021-05-01', @tdate = '2021-07-02', @lid_id = 47;
 
 declare @brid int = 9;
-declare @lid int = 43;
+declare @lid int = 49;
 
 declare @pfdatev datetime = '2021-01-01';
 declare @ptdatev datetime = '2021-04-30';
 
 declare @fdatev datetime = '2021-05-01';
 declare @tdatev datetime = '2021-07-30';
+
 
 -- selected before date wise area-1
 with cte1 as (
@@ -441,15 +446,18 @@ cte5 as (
 
 -- selected date wise area-1
 cte2 as (
-select  t2.code as vno, 
+select  
+t2.code as vno, 
 convert(varchar(10),t2.vchdate,105) as vchdate, t2.narration as remarks,
 t3.name as vchtype,
 sum(t1.debit) as debit, sum(t1.credit) as credit
+
 from accjourpostdetails as t1
 join accjourposts as t2 on t2.id = t1.accjourpost_id
 join accvchtypes as t3 on t3.id = t1.accvchtype_id
 where t2.rpmode != 0 and t1.status = 1 and t1.accjournalaccount_id = @lid and t1.branch_id = @brid
-and convert(varchar(10),t1.vchdate, 121)  between  @fdatev and @tdatev
+and convert(varchar(10),t1.vchdate, 121)  between  @fdatev and @tdatev 
+
 group by t1.accjourpost_id, t2.code, t2.vchdate, t2.narration, t3.name
 
 ),
@@ -493,8 +501,7 @@ cte8 as (
 ),
 
 -- final result
-cte10 as ( 
-    select FORMAT (@fdatev, 'dd-MM-yyyy') as vchdate, 'Opening Balance' as remarks, null as vchtype, null as vno, debit, credit from cte5
+select FORMAT (@fdatev, 'dd-MM-yyyy') as vchdate, 'Opening Balance' as remarks, null as vchtype, null as vno, debit, credit from cte5
 
     union all 
 
@@ -509,18 +516,6 @@ cte10 as (
     union all 
 
     select FORMAT (@tdatev, 'dd-MM-yyyy') as vchdate, 'Closing Balance' as remarks, null as vchtype, null as vno, (case when debit = 0 then 0 else debit end) as debit, (case when credit = 0 then 0 else credit end) as credit from cte8
-
-
-)
-
-
 --select * from cte3;
 select * from cte10;
-
-
-
-
-
-
-
 
