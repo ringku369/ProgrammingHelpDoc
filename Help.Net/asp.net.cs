@@ -509,6 +509,27 @@ string query = @"select top 50 row_number() over (order by t1.id) as rownumber,
                     WIN-KUPH617JEUN\SQLEXPRESS
 
 
+string str1 = "Hello,123456";
+int count1 = str1.IndexOf(",");
+
+string substr = str1.Substring(count1+1);
+Response.Write("Indexof : " + count1.ToString()+ " substr : " + substr.ToString()+ "<br />");
+
+
+string s = "You win some. You lose some.";
+
+string[] subs = s.Split(' ');
+int i = 0;
+foreach (var sub in subs)
+{
+    i++;
+    if (i == 3)
+    {
+        Response.Write("Substring: " + sub + "<br />");
+    }
+    
+}
+
 
 
         string url = ~UserAdd ; 

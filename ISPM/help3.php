@@ -443,21 +443,41 @@ CREATE TABLE products (
 )
 
 
-CREATE TABLE purchases (
+CREATE TABLE returns (
 
-    id BIGINT IDENTITY(1,1) PRIMARY KEY,
-    code BIGINT DEFAULT (((ident_current('purchases')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
     
-    vchno NVARCHAR(128) NULL,
-
-    totalprice decimal(18, 2) DEFAULT 0,
-    totalqty decimal(18, 2) DEFAULT 0,
-
-    remarks NVARCHAR(128) NULL,
-    status BIT DEFAULT 1,
-    created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME DEFAULT GETDATE(),
+    [id] [bigint] IDENTITY(1,1) NOT NULL,
+    [warehouse_id] [bigint] NULL,
+    [purchase_id] [bigint] NOT NULL,
+    [branch_id] [bigint] NOT NULL,
+    [vendor_id] [bigint] NOT NULL,
+    [user_id] [bigint] NOT NULL,
+    [upuser_id] [bigint] NULL,
+    [catfirst_id] [bigint] NULL,
+    [catsecond_id] [bigint] NULL,
+    [catthird_id] [bigint] NULL,
+    [productbrand_id] [bigint] NOT NULL,
+    [productunittype_id] [bigint] NOT NULL,
+    [product_id] [bigint] NOT NULL,
+    [quantity] [float] NULL,
+    [price] [decimal](18, 2) NULL,
+    [total] [decimal](18, 2) NULL,
+    [code] [bigint] DEFAULT (((ident_current('returns')+(1))+CONVERT([varchar](2),getdate(),(101)))+CONVERT([varchar](4),getdate(),(111))),
+    [status] [smallint] NULL,
+    [vchdate] [datetime] NULL,
+    [accstatus] [smallint] NULL,
+    [created_at] [datetime] NULL,
+    [updated_at] [datetime] NULL,
+    [sno] [nvarchar](64) NULL,
+    [imei] [nvarchar](64) NULL,
+    [itemcolor_id] [bigint] NULL,
+    [itemsize_id] [bigint] NULL,
+    [isstore] [bit] NULL,
+    [isitem] [bit] NULL,
 )
+
+
+
 
 CREATE TABLE purchasedetails (
 

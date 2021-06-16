@@ -20,7 +20,7 @@ AS BEGIN
     Return
   End
 
- insert into catseconds (branch_id,catfirst_id,name_en) values (9,2,'Subcategory-2')
+ --insert into catseconds (branch_id,catfirst_id,name_en) values (9,2,'Subcategory-2')
 END
 
 DROP TRIGGER ainstr_catfirsts
