@@ -51,6 +51,23 @@ window.close();
 	https://www.w3schools.com/jquery/traversing_find.asp
 
 
+
+
+
+//============
+
+## how to post and access the data using jquery ajax in asp.net webforms
+https://www.c-sharpcorner.com/blogs/how-to-insert-and-retrieve-data-using-jquery-ajax-in-asp-net
+
+//============
+
+
+
+
+
+
+
+
 var currentURL = "https://v2.gcchmc.org/appointment/Ek8NrMgPqzmDK7L/pay/";
 var response = currentURL.split("/");
 for (x in response) {

@@ -238,10 +238,16 @@ truncate table acchcrmaps;
 
 
 ReportCustomerLedger
-
-
+ComplainItem
+ComplainItemView
 accvchtype_id
 JournalVchType
+
+LDG_WBRBANK, 
+LDG_WWHBANK
+
+ReportCashBook
+ReportBankBook
 
 ReportStockF1
 
@@ -257,7 +263,7 @@ ReportDateWiseSale
 
 ReportDateWisePurchase
 
-
+SaleItemProduct
 
 SaleToAccounts
 
