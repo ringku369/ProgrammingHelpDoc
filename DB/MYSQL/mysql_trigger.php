@@ -25,6 +25,8 @@ DELIMITER ;
 
 
 
+
+
 // Creating a Before Insert Trigger
 // 
 DELIMITER $$
@@ -46,6 +48,23 @@ BEGIN
         INSERT INTO WorkCenterStats(totalCapacity)
         VALUES(new.capacity);
     END IF; 
+
+END $$
+
+DELIMITER ;
+
+
+// Creating a After Insert Trigger
+// 
+DELIMITER $$
+
+CREATE OR REPLACE TRIGGER after_cars_insert
+AFTER INSERT
+ON cars FOR EACH ROW
+BEGIN
+    DECLARE rowcount INT;
+    UPDATE brands
+        SET code = new.car;
 
 END $$
 
@@ -105,3 +124,50 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+
+
+
+// Creating a After Insert Trigger
+//
+DELIMITER $$
+
+CREATE OR REPLACE TRIGGER after_deposits_insert
+AFTER INSERT
+ON deposits FOR EACH ROW
+BEGIN
+    DECLARE rowcount INT;
+    IF new.isuser > 0 THEN
+        INSERT INTO userfunds(user_id,bank_id,debit,credit,balance,remarks,created_at,updated_at)
+        VALUES(new.user_id,new.bank_id,new.credit,new.debit,
+            ((select (case when sum(t1.credit) is null then 0 else sum(t1.credit) end) as amount from userfunds as t1 where t1.user_id = new.user_id) + new.debit),'Balance Credited',NOW(),NOW());
+    END IF; 
+
+END $$
+
+DELIMITER ;
+
+
+
+DELIMITER $$
+
+CREATE OR REPLACE TRIGGER after_userfunds_insert
+AFTER INSERT
+ON userfunds FOR EACH ROW
+BEGIN
+    DECLARE rowcount INT;
+    update users set balance = new.balance where id = new.user_id;
+
+END $$
+
+DELIMITER ;
+
+
+
+insert into deposits 
+(user_id,bank_id,debit,credit,balance,remarks,isuser,created_at) 
+values 
+(19,8,62,0,101200,'Balance Debited',1)
+
+// Creating a After Insert Trigger
+//
